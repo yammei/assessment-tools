@@ -20,7 +20,7 @@ const MainPage = () => {
     <div className='MainPage'>
 
       <div className='MainPage-Navigation-Bar'>
-        <img src='/imgs/MindMenderBlack.png' className="MainPage-Navigation-Logo" draggable='false' alt="logo"/>
+        <img src='/imgs/MindMender.png' className="MainPage-Navigation-Logo" draggable='false' alt="logo"/>
         <Scores/>
         <Logout/>
       </div>

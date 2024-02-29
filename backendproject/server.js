@@ -21,42 +21,48 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const db = new sqlite3.Database('example.db');
+const db = new sqlite3.Database('mentalhealth.db');
 
-
+// SQL column information:
+// 'score' is the cummulative score (INTEGER) of the user's completed Happiness Assessment.
+// 'score2' is the cummulative score (INTEGER) of the user's completed Social Self-Care Assessment.
 db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, score INTEGER, score2 INTEGER)');
-
-  const stmt = db.prepare('INSERT INTO users (username, password, score, score2) VALUES (?, ?, ?, ?)');
-  stmt.run('john_doe', 'password123', 0, 0);
-  stmt.finalize();
 });
 
-
+//SIGNUP: Creates new user in 'users' table and creates assessment score history.
 app.post('/api/signup', (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    db.get('SELECT id FROM users WHERE username = ?', [username], (err, row) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
+  db.get('SELECT id FROM users WHERE username = ?', [username], (err, row) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
 
-      if (row) {
-        res.status(400).json({ error: 'Username already exists' });
-      } else {
-        const stmt = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)');
-        stmt.run(username, password, (err) => {
+    if (row) {
+      res.status(400).json({ error: 'Username already exists' });
+    } else {
+      const stmt = db.prepare(`INSERT INTO users (username, password, score, score2) VALUES (?, ?, 0, 0)`);
+      stmt.run(username, password, function() {
+        const userId = this.lastID;
+
+        const stmt2 = db.prepare(`CREATE TABLE user${userId}History (assessment TEXT, score INTEGER, scoreDist TEXT, date DATE, time TIME)`);
+        stmt2.run((err) => {
           if (err) {
             res.status(500).json({ error: err.message });
           } else {
-            res.json({ message: 'User registered successfully!' });
+            res.json({ message: 'Signup Successful!' });
           }
         });
+
         stmt.finalize();
-      }
-    });
+      });
+    }
   });
+});
+
+
 app.get('/users', (req, res) => {
   db.all('SELECT id, username, password FROM users', (err, rows) => {
     if (err) {
@@ -124,6 +130,7 @@ function authenticateUser(username, password, callback) {
   });
 }
 
+// LOGIN
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -143,18 +150,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-
-// app.post('/logout', (req, res) => {
-//   req.session.destroy((err) => {
-//     if (err) {
-//       return res.status(500).json({ error: 'Logout failed' });
-//     }
-//     res.clearCookie('connect.sid'); // Clear session cookie
-//     res.json({ message: 'Logout successful' });
-//   });
-// });
-
-// Server-side route for logout
+//LOGOUT
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -165,37 +161,46 @@ app.post('/logout', (req, res) => {
   });
 });
 
-
-
+// SUBMIT: Happiness Score
 app.post('/api/scores/:userId', (req, res) => {
-  const userId = req.params.userId;
-  const { numbers} = req.body;
 
-  if (!numbers || !Array.isArray(numbers)) {
-    res.status(400).json({ error: 'Invalid input. Please provide an array of numbers and an assessmentId.' });
+  const { assessmentName, scoreDistribution } = req.body;
+  if (!scoreDistribution || !Array.isArray(scoreDistribution)) {
+    res.status(400).json({ error: 'Invalid input.' });
     return;
   }
+  const scoreSum = scoreDistribution.reduce((acc, num) => acc + num, 0);
+  const scoreDistString = JSON.stringify(scoreDistribution);
+  const userId = req.params.userId;
+  
+  const updateStmt = db.prepare('UPDATE users SET score = ? WHERE id = ?');
+  const archiveStmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, scoreDist, date, time) VALUES (?, ?, ?, DATE('now'), TIME('now'))`);  
 
-  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  console.log(userId, scoreSum);
 
-  // Store the total scores in the 'scores' table with INSERT OR REPLACE
-  const stmt = db.prepare('update users set score=? where id=?');
-  stmt.run(sum, userId, (err) => {
+  updateStmt.run(scoreSum, userId, (err) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ sum, message: 'Total scores added or replaced in the database successfully!' });
+      archiveStmt.run(assessmentName, scoreSum, scoreDistString, (err) => {
+        if (err) {
+          res.status(500).json({ error: err.message });
+        } else {
+          res.json({ message: 'Scores data updated successfully!' });
+        }
+      });
+      archiveStmt.finalize();    
     }
   });
-  stmt.finalize();
+  updateStmt.finalize();
 });
 
 app.post('/api/score2/:userId', (req, res) => {
   const userId = req.params.userId;
-  const { numbers} = req.body;
+  const { numbers } = req.body;
 
   if (!numbers || !Array.isArray(numbers)) {
-    res.status(400).json({ error: 'Invalid input. Please provide an array of numbers and an assessmentId.' });
+    res.status(400).json({ error: 'Invalid input.' });
     return;
   }
 
@@ -206,12 +211,31 @@ app.post('/api/score2/:userId', (req, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ sum, message: 'Total scores added or replaced in the database successfully!' });
+      res.json({ sum, message: 'Scores updated successfully!' });
     }
   });
   stmt.finalize();
 });
 
+// Retrieves user's history of assessment scores.
+app.post('/api/archiveScore/:userId', (req, res) => {
+  console.log("The 'archiveScore' Endpoint has been reached.");
+
+  const { scoreDistribution } = req.body;
+  const { assessmentName } = req.body;
+  const userId = req.params.userId;
+  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  const stmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, date, time) VALUES (?, ?, DATE('now'), TIME('now'))`);  
+
+  stmt.run(assessmentName, scoreDistribution, (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    } else {
+      res.json({ message: 'Score history updated successfully!' });
+    }
+    res.json({ entries: rows });
+  });
+});
 
 // Start the server
 app.listen(port, () => {

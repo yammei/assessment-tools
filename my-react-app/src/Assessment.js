@@ -15,9 +15,10 @@ const Assessment = (props) => {
       }
 
       const apiUrl = `http://localhost:4000/api/scores/${userId}`;
-      const response = await axios.post(apiUrl, { numbers: scores });
+      const response = await axios.post(apiUrl, { assessmentName: 'happiness', scoreDistribution: scores});
 
       console.log('Scores sent successfully:', response.data);
+
       setIsScoresSent(true);
 
       window.location.href = '/MainPage';

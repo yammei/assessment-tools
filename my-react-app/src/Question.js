@@ -15,7 +15,7 @@ const HappinessScale = (props) => {
     <div className='Question-Container'>
       <p className='Question-Text'>{props.title}</p>
       <div className='Rating-Container'>
-        <p className='Question-Rating-Key'>Low</p>
+        <p className='Question-Rating-Key'>Disagree</p>
         {[1, 2, 3, 4, 5].map((rating) => (
           <button
             className='Question-Rating-Button'
@@ -32,7 +32,7 @@ const HappinessScale = (props) => {
             {rating}
           </button>
         ))}
-        <p className='Question-Rating-Key'>High</p>
+        <p className='Question-Rating-Key'>Agree</p>
       </div>
     </div>
   );
