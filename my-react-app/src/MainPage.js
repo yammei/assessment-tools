@@ -3,6 +3,7 @@ import Scores from './Scores';
 import Logout from './Logout';
 import Assessment from './Assessment';
 import Assessment2 from './Assessment2';
+import History from './History';
 
 const MainPage = () => {
   const [showAssessment, setShowAssessment] = useState(true);
@@ -22,8 +23,12 @@ const MainPage = () => {
       <div className='MainPage-Navigation-Bar'>
         <img src='/imgs/MindMender.png' className="MainPage-Navigation-Logo" draggable='false' alt="logo"/>
         <Scores/>
+        <History/>
         <Logout/>
       </div>
+      <div className='MainPage-Navigation-Bar-Background'/>
+
+
       <div className='MainPage-Navigation-Bar-Push'></div>
 
       <div className='Assessment'>

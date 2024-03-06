@@ -27,7 +27,6 @@ const Assessment = (props) => {
     }
   };
 
-
     return (
         <div className='Assessment-Container'>
           <HappinessScale index={0} title="I've felt happy."> </HappinessScale>

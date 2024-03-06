@@ -23,9 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = new sqlite3.Database('mentalhealth.db');
 
-// SQL column information:
-// 'score' is the cummulative score (INTEGER) of the user's completed Happiness Assessment.
-// 'score2' is the cummulative score (INTEGER) of the user's completed Social Self-Care Assessment.
 db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, score INTEGER, score2 INTEGER)');
 });
@@ -172,7 +169,7 @@ app.post('/api/scores/:userId', (req, res) => {
   const scoreSum = scoreDistribution.reduce((acc, num) => acc + num, 0);
   const scoreDistString = JSON.stringify(scoreDistribution);
   const userId = req.params.userId;
-  
+
   const updateStmt = db.prepare('UPDATE users SET score = ? WHERE id = ?');
   const archiveStmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, scoreDist, date, time) VALUES (?, ?, ?, DATE('now'), TIME('now'))`);  
 
@@ -189,35 +186,46 @@ app.post('/api/scores/:userId', (req, res) => {
           res.json({ message: 'Scores data updated successfully!' });
         }
       });
-      archiveStmt.finalize();    
+      archiveStmt.finalize();
     }
   });
   updateStmt.finalize();
 });
 
 app.post('/api/score2/:userId', (req, res) => {
-  const userId = req.params.userId;
-  const { numbers } = req.body;
 
-  if (!numbers || !Array.isArray(numbers)) {
+  const { assessmentName, scoreDistribution } = req.body;
+  if (!scoreDistribution || !Array.isArray(scoreDistribution)) {
     res.status(400).json({ error: 'Invalid input.' });
     return;
   }
+  const scoreSum = scoreDistribution.reduce((acc, num) => acc + num, 0);
+  const scoreDistString = JSON.stringify(scoreDistribution);
+  const userId = req.params.userId;
 
-  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  const updateStmt = db.prepare('UPDATE users SET score2 = ? WHERE id = ?');
+  const archiveStmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, scoreDist, date, time) VALUES (?, ?, ?, DATE('now'), TIME('now'))`);  
 
-  const stmt = db.prepare('update users set score2=? where id=?');
-  stmt.run(sum, userId, (err) => {
+  console.log(userId, scoreSum);
+
+  updateStmt.run(scoreSum, userId, (err) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ sum, message: 'Scores updated successfully!' });
+      archiveStmt.run(assessmentName, scoreSum, scoreDistString, (err) => {
+        if (err) {
+          res.status(500).json({ error: err.message });
+        } else {
+          res.json({ message: 'Scores data updated successfully!' });
+        }
+      });
+      archiveStmt.finalize();
     }
   });
-  stmt.finalize();
+  updateStmt.finalize();
 });
 
-// Retrieves user's history of assessment scores.
+// Posts user's assessment score in user's archive.
 app.post('/api/archiveScore/:userId', (req, res) => {
   console.log("The 'archiveScore' Endpoint has been reached.");
 
@@ -225,7 +233,7 @@ app.post('/api/archiveScore/:userId', (req, res) => {
   const { assessmentName } = req.body;
   const userId = req.params.userId;
   const sum = numbers.reduce((acc, num) => acc + num, 0);
-  const stmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, date, time) VALUES (?, ?, DATE('now'), TIME('now'))`);  
+  const stmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, date, time) VALUES (?, ?, DATE('now'), TIME('now'))`);
 
   stmt.run(assessmentName, scoreDistribution, (err, rows) => {
     if (err) {
@@ -236,6 +244,29 @@ app.post('/api/archiveScore/:userId', (req, res) => {
     res.json({ entries: rows });
   });
 });
+
+// Retrieves user's history of assessment scores.
+app.get('/api/getArchiveScore/:userId/:numOfEntries/:assessmentName', (req, res) => {
+  console.log("The 'getArchiveScore' Endpoint has been reached.");
+
+  const userId = req.params.userId;
+  const numOfEntries = req.params.numOfEntries;
+  const assessmentName = req.params.assessmentName;
+
+  db.all(`SELECT * FROM user${userId}History WHERE assessment = '${assessmentName}' ORDER BY date DESC, time DESC LIMIT ${numOfEntries}`, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+
+    if (rows && rows.length > 0) {
+      res.json({ entries: rows });
+    } else {
+      res.status(404).json({ error: 'User not found or no score available' });
+    }
+  });
+});
+
 
 // Start the server
 app.listen(port, () => {

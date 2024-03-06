@@ -12,9 +12,9 @@
   top: 0px;
   height: auto;
   width: 100vw;
-  scale: 2;
-  filter: brightness(.5) blur(30px) saturate(.8);
-  z-index: -1;
+  right: 50%;
+  scale: 2.5;
+  filter: hue-rotate(220deg) brightness(.5) blur(30px) saturate(.8);
 }
 .App-Form-Container {
   display: flex;
@@ -101,7 +101,7 @@
   width: 800px;
   scale: .7;
   margin-bottom: 200px;
-  z-index: 9999;
+  z-index: 9990;
   /* background-color: red; */
 }
 #Assessment-1 {
@@ -220,12 +220,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: fit-content;
+  height: 50px;
   width: 100vw;
   padding: 10px 0px;
-  background-color: rgba(20, 20, 20, 0.05);
-  backdrop-filter: blur(25px) brightness(.8);
+  /* backdrop-filter: blur(25px) brightness(.8); */
   z-index: 9999;
+}
+.MainPage-Navigation-Bar-Background {
+  position: fixed;
+  height: 100px;
+  width: 150vw;
+  margin-top: -50px;
+  padding: 10px 0px;
+  background-color: rgba(0, 0, 0, .3);
+  filter: blur(25px);
+  backdrop-filter: blur(20px) brightness(1);
+  z-index: 9998;
 }
 .MainPage-Navigation-Bar-Push {
   height: 150px;
@@ -234,6 +244,7 @@
 .MainPage-Navigation-Logo {
   height: 20px;
   margin-left: 50px;
+  margin-right: auto;
 }
 .MainPage-Background {
   /* display: none; */
@@ -246,39 +257,36 @@
   filter: hue-rotate(220deg) brightness(.5) blur(30px) saturate(.8);
 }
 
-.Scores-Container {
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  /* background-color: red; */
-  padding: 10px;
+.Nav-Bar-Item {
   scale: .8;
+  margin: 0px;
+  /* background-color: red; */
+  z-index: 9999;
 }
-.Scores-Container p {
-  /* color: rgb(20,20,20); */
+.Nav-Bar-Item p {
   color: rgb(235,235,235);
   font-size: 15pt;
   margin: 10px;
+}
+.Nav-Bar-Link {
+  cursor: pointer;
+  user-select: none;
+}
+.Nav-Bar-Link:hover {
+  color: rgb(100,100,100);
+}
+
+#Scores-Container {
+  display: flex;
+  flex-direction: row;
+  margin: 0px -40px;
 }
 .Scores-Fraction-Text {
   font-size: 11pt;
 }
 
-.Logout-Container {
-  padding: 10px;
+#Logout-Container {
   margin-right: 50px;
-  scale: .8;
-    /* background-color: blue; */
-
-}
-.Logout-Container p {
-  /* color: rgb(20,20,20); */
-  color: rgb(235,235,235);
-  font-size: 15pt;
-  cursor: pointer;
-}
-.Logout-Container p:hover {
-  color: rgb(100,100,100);
 }
 
 @media (max-width: 800px) {

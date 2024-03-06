@@ -20,7 +20,7 @@ const Assessment2 = (props) => {
       const apiUrl = `http://localhost:4000/api/score2/${userId}`;
 
       // Send scores along with user ID
-      const response = await axios.post(apiUrl, { numbers: scores });
+      const response = await axios.post(apiUrl, { assessmentName: 'socialselfcare', scoreDistribution: scores});
 
       console.log('Scores sent successfully:', response.data);
       setIsScoresSent(true);
