@@ -66,6 +66,7 @@ const LineGraph = (props) => {
         width: `${containerWidth}px`,
         borderRadius: '25px',
         backgroundColor: 'rgb(235,235,235)',
+        boxShadow: '0 0px 15px rgba(0, 0, 0, .25)',
     };
 
     return (
@@ -88,7 +89,7 @@ const LineGraphContainer = styled.div`
     p {
         user-select: none;
         color: rgb(20,20,20);
-        z-index: 9999;
+        z-index: 9990;
     }
 `;
 

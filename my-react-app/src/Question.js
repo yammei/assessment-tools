@@ -8,7 +8,17 @@ const HappinessScale = (props) => {
   const handleRatingClick = (rating) => {
     setSelectedRating(rating === selectedRating ? null : rating);
     scores[props.index]=rating;
+    scrollToPosition();
     // console.log(scores);
+  };
+
+  const scrollToPosition = () => {
+    const scrollOffset = 125;
+
+    window.scrollTo({
+      top: window.scrollY + scrollOffset,
+      behavior: 'smooth',
+    });
   };
 
   return (
