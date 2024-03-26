@@ -4,11 +4,13 @@ import axios from 'axios';
 
 const Assessment2 = (props) => {
 
+  const displayThreshold = 30/2;
   const updateGlobalScore = props.onScoresUpdate;
   const [isScoresSent, setIsScoresSent] = useState(false);
 
   const handleSendScores = async (scores) => {
     try {
+
       const userId = localStorage.getItem('userId');
 
       if (!userId) {
@@ -19,7 +21,16 @@ const Assessment2 = (props) => {
       const apiUrl = `http://localhost:4000/api/score2/${userId}`;
       const response = await axios.post(apiUrl, { assessmentName: 'socialselfcare', scoreDistribution: scores});
 
-      updateGlobalScore(scores);
+      const sum = scores.reduce((acc, curr) => acc + curr, 0);
+
+      if (sum < displayThreshold) {
+        updateGlobalScore(scores, true);
+        console.log(`Score of ${sum} fell below display threshold. Display thershold is set to ${sum < displayThreshold}`);
+      } else {
+        updateGlobalScore(scores, false);
+        console.log(`Score of ${sum} did not fall below display threshold. Display thershold is set to ${sum < displayThreshold}`);
+      }
+
       setIsScoresSent(true);
       scrollToPosition();
       // window.location.href = '/MainPage';

@@ -47,18 +47,22 @@ const MainPage = () => {
     }
   };
 
-  const handleScoresUpdate = (scores) => {
-    const threshold = 2; // Minimum number to suggest tips.
-    const newPopOutWindowTexts = popOutWindowTexts.map((text, i) => scores[i] > threshold ? '' : text);
-    setFinalPopOutWindowTexts(newPopOutWindowTexts.filter(entry => entry !== ''));
-    setWindowColor('rgb(0, 132, 255)');
+  const handleScoresUpdate = (scores, showSuggestions) => {
+    if (showSuggestions) {
+      const threshold = 2; // Minimum number to suggest tips.
+      const newPopOutWindowTexts = popOutWindowTexts.map((text, i) => scores[i] > threshold ? '' : text);
+      setFinalPopOutWindowTexts(newPopOutWindowTexts.filter(entry => entry !== ''));
+      setWindowColor('rgb(0, 132, 255)');
+    }
   };
 
-  const handleScoresUpdate2 = (scores) => {
-    const threshold = 1; // Minimum number to suggest tips.
-    const newPopOutWindowTexts = popOutWindowTexts2.map((text, i) => scores[i] > threshold ? '' : text);
-    setFinalPopOutWindowTexts(newPopOutWindowTexts.filter(entry => entry !== ''));
-    setWindowColor('rgb(52, 26, 170)');
+  const handleScoresUpdate2 = (scores, showSuggestions) => {
+    if (showSuggestions) {
+      const threshold = 1; // Minimum number to suggest tips.
+      const newPopOutWindowTexts = popOutWindowTexts2.map((text, i) => scores[i] > threshold ? '' : text);
+      setFinalPopOutWindowTexts(newPopOutWindowTexts.filter(entry => entry !== ''));
+      setWindowColor('rgb(52, 26, 170)');
+    }
   };
 
   useEffect(() => {
