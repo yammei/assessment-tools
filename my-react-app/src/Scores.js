@@ -32,7 +32,7 @@ const Scores = ({ userId, isLoggedIn }) => {
   }, []);
 
   return (
-    <div id='Scores-Container' className='Nav-Bar-Item'>
+    <div id='Scores-Container'>
 
       <p className='Scores-User'>{`${username}'s Scores`}</p>
 

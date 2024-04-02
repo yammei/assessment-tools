@@ -5,7 +5,7 @@
   text-align: center;
   height: 100vh;
   width: 100vw;
-  /* background-color: red; */
+  background-color: red;
 }
 .App-Background {
   position: fixed;
@@ -16,6 +16,58 @@
   scale: 2.5;
   filter: hue-rotate(220deg) brightness(.5) blur(30px) saturate(.8);
 }
+.App-Foreground {
+  position: absolute;
+  scale: 1.5;
+  opacity: .025;
+  height: inherit;
+  width: auto;
+  /* background-color: green; */
+}
+.App-Content-Container {
+   display: flex;
+   flex-direction: row;
+   height: 100vh;
+   width: 100vw;
+   /* background-color: cyan; */
+   z-index: 5;
+}
+.App-Left-Container {
+  flex: 0 0 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  /* background-color: rgba(255, 0, 0, 0.8); */
+  overflow: hidden;
+  z-index: 5;
+}
+.App-Banner-Container {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: fit-content;
+  max-width: 60%;
+  margin: auto 0px;
+  padding: 50px;
+  /* background-color: cyan; */
+}
+.App-Banner-Container p {
+  color: rgb(235, 235, 235);
+  font-size: 20pt;
+  text-align: left;
+  margin-top: 0px;
+}
+.App-Right-Container {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  height: inherit;
+  background-color: rgba(225, 225, 225, 1);
+  z-index: 5;
+}
 .App-Form-Container {
   display: flex;
   flex-direction: column;
@@ -24,7 +76,7 @@
   width: fit-content;
   margin: auto 0px;
   padding: 40px;
-  background-color: rgba(235, 235, 235, .9);
+  background-color: rgba(225, 225, 225, 1);
   border-radius: 25px;
   z-index: 1;
 }
@@ -34,7 +86,8 @@
 .App-Form-Logo {
   position: absolute;
   width: 200px;
-  margin-top: -100px;
+  margin-top: 00px;
+  z-index: 9999;
 }
 .App-link {
   color: rgb(20,20,20);
@@ -60,6 +113,8 @@
   flex-direction: column;
 }
 .Form-Header {
+  display: flex;
+  flex-direction: column;
   color: rgb(235,235,235);
   font-size: 15pt;
   margin-top: 0px;
@@ -73,18 +128,24 @@
   width: 250px;
   margin: 5px 0px;
   border-radius: 30px;
-  border: none;
+  border: 2px solid #ccc;
   outline: none;
   background-color: rgb(200,200,200);
 }
+.Form-Textbox:focus {
+  border-color: rgb(0, 132, 255);
+}
 .Form-Submit {
+  align-self: center;
+  justify-content: center;
   cursor: pointer;
   color: rgb(20,20,20);
   font-weight: bold;
   font-size: 12pt;
   height: 40px;
-  width: 250px;
-  margin: 10px 0px;
+  width: 150px;
+  margin: 5px 0px;
+  margin-top: 10px;
   border-radius: 20px;
   border: none;
   /* border: 2px solid rgb(255, 149, 0); */
@@ -112,7 +173,7 @@
 }
 .Assessment-Title {
   cursor: pointer;
-  color: rgb(235,235,235);
+  color: rgba(20,20,20,1);
   font-size: 20pt;
   font-weight: bold;
   text-align: center;
@@ -128,12 +189,14 @@
   flex-direction: row;
 }
 #Assessment-Title-1 {
+  /* color: rgb(37, 81, 126); */
   align-self: flex-start;
-  background-color: rgb(0, 132, 255);
+  background-color: rgba(255, 255, 255, 0.35);
 }
 #Assessment-Title-2 {
+  /* color: rgb(129, 60, 99); */
   align-self: flex-end;
-  background-color: rgb(52, 26, 170);
+  background-color: rgba(255, 255, 255, 0.35);
 }
 .Assessment-Container {
   display: flex;
@@ -220,15 +283,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 50px;
+  height: 65px;
   width: 100vw;
   padding: 10px 0px;
-  /* backdrop-filter: blur(25px) brightness(.8); */
+  margin-left: -50%;
+  backdrop-filter: blur(25px) brightness(.5);
+  background-color: rgb(235, 235, 235);
   z-index: 9999;
 }
 .MainPage-Navigation-Bar-Background {
-  position: fixed;
-  height: 100px;
+  position: absolute;
+  left: 0;
+  height: 150px;
   width: 150vw;
   margin-top: -50px;
   padding: 10px 0px;
@@ -241,10 +307,13 @@
   height: 150px;
   width: 100vw;
 }
-.MainPage-Navigation-Logo {
-  height: 20px;
-  margin-left: 50px;
+.MainPage-Navigation-Logo-Container {
+  height: auto;
+  width: 150px;
   margin-right: auto;
+}
+.MainPage-Navigation-Logo {
+  margin-left: calc(50vw - 50%);
 }
 .MainPage-Background {
   /* display: none; */
@@ -257,25 +326,101 @@
   filter: hue-rotate(220deg) brightness(.5) blur(30px) saturate(.8);
 }
 
+.MiscPage-Container {
+  position: absolute;
+  top: 100px;
+  z-index: 10000;
+}
+.MiscPage {
+  height: fit-content;
+  align-items: center;
+  width: 1000px;
+  padding: 20px;
+  background-color: rgb(235,235,235);
+  border-radius: 10px;
+}
+.MiscPage-Background-Dim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, .3);
+  backdrop-filter: blur(1px) brightness(1);
+  z-index: 9998;
+}
+
 .Nav-Bar-Item {
-  scale: .8;
+  scale: 1;
   margin: 0px;
   /* background-color: red; */
   z-index: 9999;
 }
 .Nav-Bar-Item p {
-  color: rgb(235,235,235);
-  font-size: 15pt;
+  color: rgb(20,20,20);
+  font-size: 12pt;
   margin: 10px;
 }
 .Nav-Bar-Link {
   cursor: pointer;
   user-select: none;
+  display: flex;
+  flex-direction: row;
+  vertical-align: middle;
+}
+.Nav-Bar-Link svg {
+  fill: rgb(20,20,20);
+  height: 20px;
+  width: 20px;
+  margin: auto 0px;
 }
 .Nav-Bar-Link:hover {
-  color: rgb(100,100,100);
+  filter: brightness(.8);
 }
-
+.Menu-Container {
+  display: flex;
+  flex-direction: column;
+  /* background-color: red; */
+}
+.Menu-Content-Container {
+  position: absolute;
+  /* margin-left: -1000px; */
+  margin-top: 56px;
+  right: 0px;
+}
+.Menu-Content {
+  /* position: absolute; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: fit-content;
+  width: 250px;
+  padding: 10px 20px;
+  background-color: rgb(235,235,235);
+  border-radius: 0px;
+}
+.Menu-Content p {
+  cursor: pointer;
+  color: rgb(20, 20, 20);
+  font-size: 10pt;
+  height: fit-content;
+  width: 200px;
+  margin: 5px;
+  padding: 10px;
+  /* background-color: rgb(235,235,235); */
+  border-radius: 5px;
+  z-index: 5;
+}
+.Menu-Content p:hover {
+  color: rgb(0, 132, 255);
+  background-color: rgb(211, 225, 239);
+}
+.Menu-Content-Seperator {
+  align-self: center;
+  height: 1px;
+  width: calc(200px + (0 * 20px));
+  background-color: rgb(200,200,200);
+}
 #Scores-Container {
   display: flex;
   flex-direction: row;
@@ -287,6 +432,11 @@
 
 #Logout-Container {
   margin-right: 50px;
+}
+
+.Manage-Assessments-Container {
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 800px) {
@@ -308,7 +458,7 @@
     display: none;
   }
   .MainPage-Navigation-Logo {
-    scale: .6;
+    scale: .8;
     /* display: none; */
   }
 

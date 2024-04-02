@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import Scores from './Scores';
-import Logout from './Logout';
+
+import Navigation from './Navigation';
 import Assessment from './Assessment';
 import Assessment2 from './Assessment2';
-import History from './History';
 import PopOutWindow from './PopOutWindow';
+import ManageAssessments from './ManageAssessments/ManageAssessments';
+import History from './History';
+import Scores from './Scores';
 
 const MainPage = () => {
   const [showAssessment, setShowAssessment] = useState(true);
   const [showPopOutWindow, setShowPopOutWindow] = useState(false);
   const [windowColor, setWindowColor] = useState('rgb(20,20,20)');
+  const [displayComponentIndex, setDisplayComponentIndex] = useState(-1);
+  const [displayMiscMenuContainer, setDisplayMiscMenuContainer ] = useState({
+    display: 'none',
+  });
   // Suggestions for Assessment#1
   const popOutWindowTexts = [
     "Assessment 1: Sample suggestion for prompt #1.",
@@ -37,6 +43,7 @@ const MainPage = () => {
     "Assessment 2: Sample suggestion for prompt #10.",
   ];
   var [finalPopOutWindowTexts, setFinalPopOutWindowTexts] = useState([]);
+
 
   const switchAssessment = (assessmentClicked) => {
     if (assessmentClicked === 1) {
@@ -74,19 +81,34 @@ const MainPage = () => {
     setShowPopOutWindow(false);
   };
 
+  const handleDisplayComponentIndex = (index) => {
+    if (index !== -1) {
+      setDisplayComponentIndex(index);
+      setDisplayMiscMenuContainer({display: 'block'})
+      // console.log(`Now displaying component index (global) ${displayComponentIndex}`);
+    } else {
+      console.log(`Index below range for handleDisplayComponentIndex()`);
+    }
+  };
+
+  const handleBackgroundDimClick = () => {
+    setDisplayComponentIndex(-1);
+    setDisplayMiscMenuContainer({display: 'none'})
+  };
+
   return (
     <div className='MainPage'>
 
-      <div className='MainPage-Navigation-Bar'>
-        <img src='/imgs/MindMender.png' className="MainPage-Navigation-Logo" draggable='false' alt="logo"/>
-        <Scores/>
-        <History/>
-        <Logout/>
-      </div>
-      <div className='MainPage-Navigation-Bar-Background'/>
-
+      <Navigation displayComponentIndexFunction={handleDisplayComponentIndex}/>
 
       <div className='MainPage-Navigation-Bar-Push'></div>
+
+      <div className='MiscPage-Container MiscPage' style={displayMiscMenuContainer}>
+        { displayComponentIndex === 0 && <p>Account Settings</p> }
+        { displayComponentIndex === 1 && <Scores/> }
+        { displayComponentIndex === 2 && <ManageAssessments/> }
+      </div>
+      { displayComponentIndex !== -1 && <div className='MiscPage-Background-Dim' onClick={() => handleBackgroundDimClick(-1)}/>}
 
       {showPopOutWindow ?
       <PopOutWindow title={'Tips & Suggestions'} texts={finalPopOutWindowTexts} windowColor={windowColor} display={'block'} close={closePopOutWindow}/>
@@ -96,7 +118,7 @@ const MainPage = () => {
 
       <div className='Assessment'>
         <div className='Assessment-Titles'>
-          <p className='Assessment-Title' id='Assessment-Title-1' onClick={() => switchAssessment(1)}>Happiness Assessment</p>
+          <p className='Assessment-Title' id='Assessment-Title-1' onClick={() => switchAssessment(1)}>Happiness</p>
           <p className='Assessment-Title' id='Assessment-Title-2' onClick={() => switchAssessment(2)}>Social Self-Care</p>
         </div>
         {showAssessment ? <Assessment onScoresUpdate={handleScoresUpdate}/> : <Assessment2 onScoresUpdate={handleScoresUpdate2}/>}

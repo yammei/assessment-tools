@@ -1,3 +1,4 @@
+const { comparePasswords, hashPassword, insertUser } = require('./encryption');
 const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
@@ -24,12 +25,14 @@ app.use(express.urlencoded({ extended: true }));
 const db = new sqlite3.Database('mentalhealth.db');
 
 db.serialize(() => {
-  db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, score INTEGER, score2 INTEGER)');
+  db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT, score INTEGER, score2 INTEGER)');
 });
 
 //SIGNUP: Creates new user in 'users' table and creates assessment score history.
-app.post('/api/signup', (req, res) => {
-  const { username, password } = req.body;
+app.post('/api/signup', async (req, res) => {
+  const { username, email, password } = req.body;
+  const hashedPassword = await hashPassword(password);
+
 
   db.get('SELECT id FROM users WHERE username = ?', [username], (err, row) => {
     if (err) {
@@ -40,10 +43,9 @@ app.post('/api/signup', (req, res) => {
     if (row) {
       res.status(400).json({ error: 'Username already exists' });
     } else {
-      const stmt = db.prepare(`INSERT INTO users (username, password, score, score2) VALUES (?, ?, 0, 0)`);
-      stmt.run(username, password, function() {
+      const stmt = db.prepare(`INSERT INTO users (username, email, password, score, score2) VALUES (?, ?, ?, 0, 0)`);
+      stmt.run(username, email, hashedPassword, function() {
         const userId = this.lastID;
-
         const stmt2 = db.prepare(`CREATE TABLE user${userId}History (assessment TEXT, score INTEGER, scoreDist TEXT, date DATE, time TIME)`);
         stmt2.run((err) => {
           if (err) {
@@ -105,21 +107,23 @@ app.get('/api/getscore2/:userId', (req, res) => {
 });
 
 function authenticateUser(username, password, callback) {
-  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+  console.log("Function Reached: authenticateUser()");
+  const query = 'SELECT * FROM users WHERE username = ?';
 
-  db.get(query, [username, password], (err, row) => {
+  db.get(query, [username], async (err, row) => {
     if (err) {
       callback(err, null);
       return;
     }
 
     if (row) {
+      const passwordMatch = await comparePasswords(password, row.password);
       const user = {
         id: row.id,
         username: row.username,
         score: row.score,
       };
-      callback(null, user);
+      callback(null, user, passwordMatch);
     } else {
       // If no user is found
       callback(null, null);
@@ -128,15 +132,16 @@ function authenticateUser(username, password, callback) {
 }
 
 // LOGIN
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
+  console.log("Endpoint Reached: /api/login");
   const { username, password } = req.body;
 
-  authenticateUser(username, password, (err, user) => {
+  authenticateUser(username, password, (err, user, passwordMatch) => {
     if (err) {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
 
-    if (user) {
+    if (user && passwordMatch) {
       req.session.userId = user.id;
       req.session.username = user.username;
       console.log(user);
@@ -284,3 +289,6 @@ process.on('SIGINT', () => {
   });
 });
 
+module.exports = {
+  db,
+};

@@ -16,8 +16,8 @@ const Logout = () => {
   };
 
   return (
-    <div id='Logout-Container' className='Nav-Bar-Item'>
-      <p  className="Nav-Bar-Link" onClick={handleLogout}>Logout</p>
+    <div id='Logout-Container'>
+      <p onClick={handleLogout}>Logout</p>
     </div>
   );
 };

@@ -53,7 +53,7 @@ const Assessment2 = (props) => {
         <SocialSelfCareScale index={0} title="Spend time with people who I like."> </SocialSelfCareScale>
         <SocialSelfCareScale index={1} title="Contact friends and family who are far away."> </SocialSelfCareScale>
         <SocialSelfCareScale index={2} title="Have stimulating conversations."> </SocialSelfCareScale>
-        <SocialSelfCareScale index={3} title="Meet new people"> </SocialSelfCareScale>
+        <SocialSelfCareScale index={3} title="Meet new people."> </SocialSelfCareScale>
         <SocialSelfCareScale index={4} title="Spend time alone with my love ones."> </SocialSelfCareScale>
         <SocialSelfCareScale index={5} title="Ask others for help, when needed."> </SocialSelfCareScale>
         <SocialSelfCareScale index={6} title="Do enjoyable activities with other people."> </SocialSelfCareScale>
