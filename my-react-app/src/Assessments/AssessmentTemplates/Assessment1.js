@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { HappinessScale, scores } from './Question';
+import { HappinessScale, scores } from './Question1';
 import axios from 'axios';
 
-const Assessment = (props) => {
+const Assessment1 = (props) => {
 
   const displayThreshold = 50/2;
   const updateGlobalScore = props.onScoresUpdate;
@@ -65,4 +65,4 @@ const Assessment = (props) => {
   );
 };
 
-export default Assessment;
+export default Assessment1;

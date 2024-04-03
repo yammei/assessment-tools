@@ -155,13 +155,13 @@
 .Assessment {
   position: absolute;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-self: center;
   align-items: center;
-  top: -100px;
   height: fit-content;
-  width: 800px;
-  scale: .7;
-  margin-bottom: 200px;
+  width: fit-content;
+  max-width: 1000px;
+  margin: 100px 0px;
   z-index: 9990;
   /* background-color: red; */
 }
@@ -202,14 +202,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: center;
   height: fit-content;
-  width: inherit;
-  margin: 0px;
-  background-color: rgb(235,235,235);
-  /* border: 5px solid rgb(0, 132, 255); */
-  /* box-shadow: inset 0 0 0 5px rgb(0, 132, 255); */
-  border-radius: 0px 0px 50px 50px;
-  border-top: 0;
+  width: 1000px;
+  margin: auto;
+  margin-top: 20px;
+  margin-left: 0px;
+  border-top: 1px solid rgb(200,200,200);
   z-index: 10;
 }
 .Assessment-Container p {
@@ -276,22 +275,26 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: rgb(200,200,200);
+  /* background-color: rgb(75,75,75); */
 }
 .MainPage-Navigation-Bar {
   position: fixed;
   display: flex;
   flex-direction: row;
   align-items: center;
+  left: 0;
   height: 65px;
   width: 100vw;
   padding: 10px 0px;
-  margin-left: -50%;
-  backdrop-filter: blur(25px) brightness(.5);
+  /* margin-left: -50%; */
+  /* backdrop-filter: blur(25px) brightness(.5); */
+  /* background-color: rgb(20, 20, 20); */
   background-color: rgb(235, 235, 235);
+  border-bottom: 1px solid rgb(200,200,200); 
   z-index: 9999;
 }
 .MainPage-Navigation-Bar-Background {
+  display: none;
   position: absolute;
   left: 0;
   height: 150px;
@@ -308,22 +311,26 @@
   width: 100vw;
 }
 .MainPage-Navigation-Logo-Container {
+  position: absolute;
   height: auto;
   width: 150px;
-  margin-right: auto;
+  left: calc(50vw - 75px);
+  /* margin-left: auto;
+  margin-right: auto; */
 }
 .MainPage-Navigation-Logo {
-  margin-left: calc(50vw - 50%);
+  /* margin-right: calc(50vw); */
 }
 .MainPage-Background {
   /* display: none; */
   position: fixed;
   top: 0px;
-  height: auto;
+  right: 0;
+  height: 100vh;
   width: 100vw;
-  right: 50%;
-  scale: 2.5;
-  filter: hue-rotate(220deg) brightness(.5) blur(30px) saturate(.8);
+  /* scale: 2.5; */
+  background-color: rgb(235,235,235);
+  /* filter: hue-rotate(220deg) brightness(.5) blur(30px) saturate(.8); */
 }
 
 .MiscPage-Container {
@@ -334,7 +341,7 @@
 .MiscPage {
   height: fit-content;
   align-items: center;
-  width: 1000px;
+  width: 600px;
   padding: 20px;
   background-color: rgb(235,235,235);
   border-radius: 10px;
@@ -353,10 +360,12 @@
 .Nav-Bar-Item {
   scale: 1;
   margin: 0px;
+  width: fit-content;
   /* background-color: red; */
   z-index: 9999;
 }
 .Nav-Bar-Item p {
+  /* color: rgb(235,235,235); */
   color: rgb(20,20,20);
   font-size: 12pt;
   margin: 10px;
@@ -369,7 +378,8 @@
   vertical-align: middle;
 }
 .Nav-Bar-Link svg {
-  fill: rgb(20,20,20);
+  /* fill: rgb(235,235,235); */
+  fill: rgb(20, 20, 20);
   height: 20px;
   width: 20px;
   margin: auto 0px;
@@ -380,12 +390,13 @@
 .Menu-Container {
   display: flex;
   flex-direction: column;
+  margin-left: 20px;
   /* background-color: red; */
 }
 .Menu-Content-Container {
   position: absolute;
   /* margin-left: -1000px; */
-  margin-top: 56px;
+  margin-top: 55px;
   right: 0px;
 }
 .Menu-Content {
@@ -393,10 +404,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: fit-content;
+  height: 100vh;
   width: 250px;
+  margin-left: calc(50% - 20px);
   padding: 10px 20px;
   background-color: rgb(235,235,235);
+  border-right: 1px solid rgb(200,200,200); 
   border-radius: 0px;
 }
 .Menu-Content p {
@@ -424,7 +437,7 @@
 #Scores-Container {
   display: flex;
   flex-direction: row;
-  margin: 0px -40px;
+  margin: 0px 0px;
 }
 .Scores-Fraction-Text {
   font-size: 11pt;
@@ -432,11 +445,6 @@
 
 #Logout-Container {
   margin-right: 50px;
-}
-
-.Manage-Assessments-Container {
-  display: flex;
-  align-items: center;
 }
 
 @media (max-width: 800px) {

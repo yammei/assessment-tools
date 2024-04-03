@@ -1,14 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import CustomAssessment from './CustomAssessment';
+import NewAssessmentForm from './NewAssessmentForm';
 
  const ManageAssessments = () => {
+    const [displayNewAssessmentForm, setDisplayNewAssessmentForm] = useState(false);
+
+    const handleNewAssessmentClick = () => {
+        // console.log(`Reached handleNewAssessmentClick() from Management.js`);
+        setDisplayNewAssessmentForm(true);
+    };
 
     return(
         <ManageAssessmentsContainer>
-            <ManageAssessmentsButton>
+            <ManageAssessmentsButton onClick={handleNewAssessmentClick}>
                 <p>New Assessment</p>
             </ManageAssessmentsButton>
+            
+            { displayNewAssessmentForm === true && <NewAssessmentForm/> }
 
             <ManageAssessmentsLists>
                 <p>My Assessments</p>
