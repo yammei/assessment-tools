@@ -4,7 +4,7 @@ import axios from 'axios';
 const CustomAssessment = (props) => {
 
     // Call backend API to retrieve list of assessments.
-    const GetAssessment = async () => {
+    const GetAssessment = async (assessmentName) => {
         try {
             const userId = localStorage.getItem('userId');
 
@@ -14,7 +14,7 @@ const CustomAssessment = (props) => {
             }
 
             const apiUrl = `http://localhost:4000/getAssessment`;
-            const response = await axios.post(apiUrl, { assessmentName: 'happiness', scoreDistribution: scores});
+            const response = await axios.post(apiUrl, { assessmentName: assessmentName});
 
           } catch (error) {
             console.error('Error sending scores:', error);
