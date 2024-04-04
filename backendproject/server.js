@@ -209,7 +209,7 @@ app.post('/api/score2/:userId', (req, res) => {
   const userId = req.params.userId;
 
   const updateStmt = db.prepare('UPDATE users SET score2 = ? WHERE id = ?');
-  const archiveStmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, scoreDist, date, time) VALUES (?, ?, ?, DATE('now'), TIME('now'))`);  
+  const archiveStmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, scoreDist, date, time) VALUES (?, ?, ?, DATE('now'), TIME('now'))`);
 
   console.log(userId, scoreSum);
 
@@ -268,6 +268,69 @@ app.get('/api/getArchiveScore/:userId/:numOfEntries/:assessmentName', (req, res)
       res.json({ entries: rows });
     } else {
       res.status(404).json({ error: 'User not found or no score available' });
+    }
+  });
+});
+
+
+//NEW ASSESSMENT: Creates new assessment.
+app.post('/newAssessment', async (req, res) => {
+  const { userId, assessmentName, assessmentEntries, assessmentRatingNum } = req.body;
+
+  const createTableStmt = `
+    CREATE TABLE IF NOT EXISTS user${userId}Assessments 
+    (
+      assessmentId INTEGER PRIMARY KEY AUTOINCREMENT, 
+      assessmentName TEXT, 
+      assessmentEntries TEXT, 
+      assessmentRatingNum INTEGER
+    )
+  `;
+
+  db.run(createTableStmt, (err) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    const insertStmt = `
+      INSERT INTO user${userId}Assessments 
+      (
+        assessmentName, 
+        assessmentEntries, 
+        assessmentRatingNum
+      )
+      VALUES (?, ?, ?)
+    `;
+
+    db.run(insertStmt, [assessmentName, JSON.stringify(assessmentEntries), assessmentRatingNum], function(err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      res.json({ message: 'New assessment created successfully!' });
+    });
+  });
+});
+
+//GET ASSESSMENT: Retrieves existing assessment.
+app.post('/getAssessment', async (req, res) => {
+  const { userId, assessmentName } = req.body;
+
+  const selectStmt = `
+    SELECT assessmentId, assessmentName, assessmentEntries, assessmentRatingNum 
+    FROM user${userId}Assessments
+    WHERE assessmentName = ?
+  `;
+
+  db.get(selectStmt, [assessmentName], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (row) {
+      res.json({ assessment: row });
+    } else {
+      res.status(404).json({ message: 'No assessment found for this user with the provided name' });
     }
   });
 });

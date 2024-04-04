@@ -7,6 +7,8 @@ const NewAssessmentFormInput = (props) => {
     const [ displayAdd, setDisplayAdd ] = useState(`none`);
     const [ displayRemove, setDisplayRemove ] = useState(`none`);
 
+    console.log("NewAssessmentFormInput: ", "add func: ", props.addInstanceFunction);
+
     useEffect(() => {
         if (props.inputDisplayAdd) {
             setDisplayAdd(`block`);
@@ -23,12 +25,12 @@ const NewAssessmentFormInput = (props) => {
             <NewAssessmentFormInputContainerDivider/>
             <input id='QueryInput' placeholder={inputPlaceholderText}></input>
             <NewAssessmentFormInputContainerDivider/>
-            <NewAssessmentFormInputSVGContainer>
+            {/* <NewAssessmentFormInputSVGContainer>
                 <div>
-                    <svg style={{display: `${displayAdd}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                    <svg style={{display: `${displayRemove}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                    <svg onClick={() => props.addInstanceFunction(number+1)} style={{display: `${displayAdd}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                    <svg onClick={() => props.deleteInstanceFunction(number)} style={{display: `${displayRemove}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
                 </div>
-            </NewAssessmentFormInputSVGContainer>
+            </NewAssessmentFormInputSVGContainer> */}
 
         </NewAssessmentFormInputContainer>
     );
@@ -38,6 +40,8 @@ const NewAssessmentFormInputContainer = styled.div`
     display: flex;
     flex-direction: row;
     margin: 15px 0px;
+    /* width: min-content; */
+    background-color: brown;
     & label {
         font-size: 10pt;
         text-align: center;
