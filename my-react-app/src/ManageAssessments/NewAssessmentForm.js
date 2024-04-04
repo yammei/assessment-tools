@@ -1,30 +1,55 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+import NewAssessmentFormInput from './NewAssessmentFormInput';
+
 const NewAssessmentForm = (props) => {
-    const InputPlaceholderText = 'Enter statement or question ...';
+    const [inputInstances, setinputInstances] = useState([]);
+    const inputPlaceholderText = 'Enter statement or question ...';
+
+
+    const handleAddInstance = (index) => {
+        const newArray = [...inputInstances,
+        <NewAssessmentFormInput
+            key={inputInstances.length}
+            inputNumber={inputInstances.length}
+            inputPlaceholderText={inputPlaceholderText}
+            inputDisplayAdd={true}
+            inputDisplayRemove={true}
+        />];
+        setinputInstances(newArray);
+      };
+
+      const handleDeleteInstance = (index) => {
+        const newArray = [...inputInstances];
+        newArray.splice(index, 1);
+        setinputInstances(newArray);
+      };
+
     return(
         <NewAssessmentFormContainer>
-            <p>New Assessment Form Component</p>
+            <div style={{height: 'fit-content', width: 'inherit', margin: 'auto', padding: '20px', overflow: 'scroll'}}>
+                <p>New Assessment Form Component</p>
 
-            <NewAssessmentFormColumnNames>
-                <p id='NewAssessmentFormColumn0'>#</p>
-                <p id='NewAssessmentFormColumn1'>Query/Statement</p>
-                <p id='NewAssessmentFormColumn2'>Add/Delete</p>
-            </NewAssessmentFormColumnNames>
+                <NewAssessmentFormColumnNames>
+                    <p style={{flex: '0 0 10%', textAlign: 'center'}}>no.</p>
+                    <NewAssessmentFormInputContainerDivider/>
+                    <p style={{flex: '0 0 50%', textAlign: 'center'}}>Query/Statement</p>
+                    <NewAssessmentFormInputContainerDivider/>
+                    <p style={{flex: '0 0 10%', textAlign: 'center'}}>+/-</p>
+                </NewAssessmentFormColumnNames>
 
-            <NewAssessmentFormInputContainer>
-                <label for='QueryInput'>1</label>
-                <input id='QueryInput' placeholder={InputPlaceholderText}></input>
-            </NewAssessmentFormInputContainer>
-
-            <NewAssessmentFormInputContainer>
-                <label for='QueryInput'>2</label>
-                <input id='QueryInput' placeholder={InputPlaceholderText}></input>
-                <NewAssessmentFormInputContainerDivider/>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>            </NewAssessmentFormInputContainer>
-
+                {inputInstances.map((component, index) => (
+                    component
+                ))}
+                <button onClick={() => handleAddInstance(4)}> add </button>
+                <button onClick={() => handleDeleteInstance()}> remove </button>
+                <NewAssessmentFormInput inputNumber={1} inputPlaceholderText={inputPlaceholderText} inputDisplayAdd={true} inputDisplayRemove={true}/>
+                <NewAssessmentFormInput inputNumber={2} inputPlaceholderText={inputPlaceholderText} inputDisplayAdd={true} inputDisplayRemove={true}/>
+                <NewAssessmentFormInput inputNumber={3} inputPlaceholderText={inputPlaceholderText} inputDisplayAdd={true} inputDisplayRemove={true}/>
+                <NewAssessmentFormInput inputNumber={4} inputPlaceholderText={inputPlaceholderText} inputDisplayAdd={true} inputDisplayRemove={true}/>
+                <NewAssessmentFormInput inputNumber={5} inputPlaceholderText={inputPlaceholderText} inputDisplayAdd={true} inputDisplayRemove={true}/>
+            </div>
         </NewAssessmentFormContainer>
     );
 
@@ -44,49 +69,24 @@ const NewAssessmentFormContainer = styled.div`
         color: rgb(20, 20, 20);
     }
 `;
+
 const NewAssessmentFormColumnNames = styled.div`
     display: flex;
     flex-direction: row;
-    & p {
-        font-size: 12pt;
-        color: rgb(20, 20, 20);
-    }
-`;
-const NewAssessmentFormInputContainer = styled.div`
-    display: flex;
-    flex-direction: row;
     margin: 10px 0px;
-    & label {
-        margin-right: 20px;
-    }
-    & input {
-        // text-align: center;
-        text-indent: 7px;
-        height: 25px;
-        width: 300px;
-        margin: auto 10px;
-        padding-left: 7px;
-        background-color: rgb(225, 225, 225);
-        box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.25);
-        outline: none;
-        border-radius: 50px;
-    }
-    & svg {
-        cursor: pointer;
-        fill: rgb(20, 20, 20);
-        height: 15px;
-        width: auto;
-        margin: auto 5px;
+    & p {
+        font-size: 10pt;
+        color: rgb(20, 20, 20);
+        margin: auto 0px;
     }
 `;
+
 const NewAssessmentFormInputContainerDivider = styled.div`
-    height: 25px;
+    flex: '0 0 5%';
+    height: 20px;
     width: 1px;
     margin: auto 10px;
     background-color: rgb(200, 200, 200);
-`;
-const NewAssessmentFormInputContainerRemove = styled.div`
-
 `;
 
 export default NewAssessmentForm;

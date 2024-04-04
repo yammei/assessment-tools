@@ -16,7 +16,7 @@ import NewAssessmentForm from './NewAssessmentForm';
             <ManageAssessmentsButton onClick={handleNewAssessmentClick}>
                 <p>New Assessment</p>
             </ManageAssessmentsButton>
-            
+
             { displayNewAssessmentForm === true && <NewAssessmentForm/> }
 
             <ManageAssessmentsLists>
