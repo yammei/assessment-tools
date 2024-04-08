@@ -407,12 +407,37 @@ app.post('/newAssessment', async (req, res) => {
 });
 
 //GET ASSESSMENT: Retrieves existing assessment.
+app.get('/getAssessmentData', (req, res) => {
+  const { userId } = req.query;
+  console.log(userId);
+
+  const selectStmt = `
+    SELECT assessmentId, assessmentName, assessmentDescription, assessmentEntries, assessmentRatingNum 
+    FROM user${userId}Assessments
+  `;
+
+  db.all(selectStmt, (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+      return;
+    }
+
+    if (rows && rows.length > 0) {
+      res.json({ assessments: rows });
+    } else {
+      res.status(404).json({ message: 'No assessments found for this user' });
+      return;
+    }
+  });
+});
+
+//GET ASSESSMENT: Retrieves existing assessment.
 app.get('/getAssessment', (req, res) => {
   const { userId, assessmentName } = req.query;
   console.log(userId, assessmentName);
 
   const selectStmt = `
-    SELECT assessmentId, assessmentName, assessmentEntries, assessmentRatingNum 
+    SELECT assessmentId, assessmentName, assessmentDescription, assessmentEntries, assessmentRatingNum 
     FROM user${userId}Assessments
     WHERE assessmentName = ?
     LIMIT 1;
@@ -431,6 +456,40 @@ app.get('/getAssessment', (req, res) => {
   });
 });
 
+//GET ASSESSMENT: Retrieves existing assessment.
+app.get('/getAssessmentDataAtIndex', (req, res) => {
+  const { userId, assessmentIndex } = req.query;
+  console.log(userId, assessmentIndex);
+
+  const selectStmt = `
+    SELECT assessmentId, assessmentName, assessmentDescription, assessmentEntries, assessmentRatingNum 
+    FROM user${userId}Assessments
+    LIMIT 1 OFFSET ${assessmentIndex};
+  `;
+
+  const selectStmtTest = `
+    SELECT assessmentId, assessmentName, assessmentDescription, assessmentEntries, assessmentRatingNum 
+    FROM user1CustomScores
+    ORDER BY date DESC, time DESC
+    LIMIT 1 OFFSET 0;
+  `;
+
+  console.log(selectStmt);
+
+  db.get(selectStmt, (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (row) {
+      res.json({ assessment: row });
+    } else {
+      // res.status(404).json({ message: 'No assessment found for this user with the provided name' });
+      return;
+    }
+  });
+});
+
 //GET ASSESSMENT NAMES: Retrieves existing assessment.
 app.get('/getAssessmentNames', (req, res) => {
   const { userId } = req.query;
@@ -443,7 +502,7 @@ app.get('/getAssessmentNames', (req, res) => {
 
   db.all(selectStmt, (err, rows) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      return;
     }
 
     if (rows && rows.length > 0) {

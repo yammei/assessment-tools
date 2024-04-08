@@ -33,6 +33,10 @@ const ManageAssessmentsContainer = styled.div`
     flex-direction: column;
     height: 80vh;
     overflow: auto;
+    &::-webkit-scrollbar {
+        display: none;
+        background-color: rgb(235, 235, 235);
+    }
 `;
 
 const ManageAssessmentsButton = styled.div`

@@ -109,6 +109,10 @@ const Assessments = (props) => {
                 <PopOutWindow title={'Tips & Suggestions'} texts={finalPopOutWindowTexts} display={'none'} close={closePopOutWindow}/>
             }
 
+            <AssessmentTitle>
+                <p>My Assessments</p>
+            </AssessmentTitle>
+
             <AssessmentSelectionContainer>
                 <AssessmentSelection title="Happiness"              index={0} displayAssessmentIndexFunction={handleDisplayAssessmentIndex}/>
                 <AssessmentSelection title="Social Self-Care"       index={1} displayAssessmentIndexFunction={handleDisplayAssessmentIndex}/>
@@ -127,7 +131,6 @@ const Assessments = (props) => {
                 { displayAssessmentIndex === 4 && <CustomAssessment assessmentName2={assessmentNames[2]} onScoresUpdate={handleScoresUpdateCustom}/>}
                 { displayAssessmentIndex === 5 && <CustomAssessment assessmentName2={assessmentNames[3]} onScoresUpdate={handleScoresUpdateCustom}/>}
                 { displayAssessmentIndex === 6 && <CustomAssessment assessmentName2={assessmentNames[4]} onScoresUpdate={handleScoresUpdateCustom}/>}
-
             </AssessmentSectionContainer>
 
         </AssessmentsComponentContainer>
@@ -141,6 +144,8 @@ const AssessmentsComponentContainer = styled.div`
     height: fit-content;
     width: 100vw;
     margin: auto;
+    margin-top: 0px;
+    // background-color: red;
     & p {
         font-size: 12pt;
         color: rgb(20,20,20);
@@ -151,13 +156,27 @@ const AssessmentSelectionContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 1000px;
-
-`;
+    width: 885px;
+    margin: 10px auto;
+    margin-top: -5px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 10px;
+    `;
 
 const AssessmentSectionContainer = styled.div`
     display: flex;
     flex-direction: column;
 `;
 
+const AssessmentTitle = styled.div`
+    margin: 10px auto;
+    width: 885px;
+    & p {
+        // color: rgb(150, 150, 150);
+        font-size: 15pt;
+        text-align: left;
+        margin: 0px auto;
+        // background-color: red;
+    }
+`;
 export default Assessments;
