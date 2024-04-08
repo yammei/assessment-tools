@@ -19,7 +19,7 @@ import NewAssessmentForm from './NewAssessmentForm';
             { displayNewAssessmentForm === true && <NewAssessmentForm/> }
 
             <ManageAssessmentsLists>
-                <p>My Assessments</p>
+                <p>My Assessments (In Dev.)</p>
             </ManageAssessmentsLists>
 
         </ManageAssessmentsContainer>

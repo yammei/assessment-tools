@@ -7,7 +7,8 @@ import NewAssessmentFormInput from './NewAssessmentFormInput';
 const NewAssessmentForm = (props) => {
     const [inputInstances, setInputInstances] = useState([]);
     const [inputInstancesText, setInputInstancesText] = useState([]);
-    const inputPlaceholderText = 'Enter statement or question ...';
+    const inputPlaceholderText = 'Prompt (Max. 30 Characters)';
+    const inputPlaceholderText2 = 'Treatment (Max. 100 Characters)';
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -89,52 +90,79 @@ const NewAssessmentForm = (props) => {
     return(
         <NewAssessmentFormContainer>
             <div style={{height: 'fit-content', width: 'inherit', margin: 'auto', padding: '20px', overflow: 'scroll'}}>
-                <p style={{height: 'fit-content', width: 'fit-content', margin: '10px auto'}}>New Assessment Form Component</p>
+
+                <div style={{display: 'flex', flexDirection: 'row', height: '20px', backgroundColor: ''}}>
+                    <p style={{height: 'fit-content', width: 'fit-content', whiteSpace: 'nowrap', marginTop: '0px', marginRight: 'auto', paddingRight: '10px', marginBottom: '10px'}}>
+                        General Information
+                    </p>
+                    <NewAssessmentFormVerticalDivider/>
+                </div>
 
                 <NewAssessmentFormMiscInputsContainer style={{ display: 'flex', flexDirection: 'column' }}>
-                    <input placeholder='Assessment Name' type='text' value={name} onChange={(e) => setName(e.target.value)} />
-                    <input placeholder='Assessment Description' type='text' value={description} onChange={(e) => setDescription(e.target.value)} />
-                    <input placeholder='Rating Scale (2-5)' type='number' value={scale} onChange={(e) => setScale(e.target.value)} />
-                    <input placeholder='Treatments & Suggestions' type='text' value={suggestions} onChange={(e) => setSuggestions(e.target.value)} />
+                    <label for='input-0'>Assessment Name</label>
+                    <input id='input-0' placeholder='Assessment Name (Max. 20 Characters)' type='text' maxLength='20' value={name} onChange={(e) => setName(e.target.value)} />
+
+                    <label for='input-1'>Assessment Description</label>
+                    <input id='input-1' placeholder='Assessment Description (Max. 100 Characters)' type='text' maxLength='100' value={description} onChange={(e) => setDescription(e.target.value)} />
+
+                    <label for='input-2'>Response Rating Scale</label>
+                    <input id='input-2' placeholder=' Response Rating Scale (Range: 2-5)' type='number' min='2' max='5' value={scale} onChange={(e) => setScale(e.target.value)} />
+
+                    {/* <label for='input-3'>Treatments & Suggestions</label>
+                    <input id='input-3' placeholder='Treatments & Suggestions' type='text' value={suggestions} onChange={(e) => setSuggestions(e.target.value)} /> */}
                 </NewAssessmentFormMiscInputsContainer>
+
+                <div style={{display: 'flex', flexDirection: 'row', height: '20px', margin: '30px 0px', backgroundColor: ''}}>
+                    <p style={{height: 'fit-content', width: 'fit-content', whiteSpace: 'nowrap', marginTop: '0px', marginRight: 'auto', paddingRight: '10px', marginBottom: '10px'}}>
+                        Assessment Entries
+                    </p>
+                    <NewAssessmentFormVerticalDivider/>
+                </div>
+
 
                 <NewAssessmentFormColumnNames>
                     <p style={{width: '50px', textAlign: 'center'}}>no.</p>
                     <NewAssessmentFormInputContainerDivider/>
-                    <p style={{width: '300px', textAlign: 'center', margin: 'auto 0px'}}>Query/Statement</p>
+                    <p style={{width: '300px', textAlign: 'center', margin: 'auto 0px'}}>Prompt & Treatment</p>
                     <NewAssessmentFormInputContainerDivider/>
                     <p style={{width: '50px', textAlign: 'center'}}>+/-</p>
                     {/* <p style={{flex: '0 0 20%', textAlign: 'center', backgroundColor: 'pink'}}>a</p> */}
                 </NewAssessmentFormColumnNames>
 
-                <NewAssessmentFormInputContainerSUPER>
-                    <div style={{width: 'fit-content'}}>
-                        <NewAssessmentFormInput inputNumber={1} inputPlaceholderText={inputPlaceholderText} updateInputValue={handleUpdateInputValue}/>
-                    </div>
-                    {
-                        <NewAssessmentFormInputSVGContainer>
-                            <div>
-                                <svg onClick={() => handleAddInstance(1)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                                <svg onClick={() => handleDeleteInstance(1)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
-                            </div>
-                        </NewAssessmentFormInputSVGContainer>
-                    }
-                </NewAssessmentFormInputContainerSUPER>
+                <NewAssessmentFormInputContainerSUPERDUPER>
+                    <NewAssessmentFormInputContainerSUPER>
+                        <div style={{width: 'fit-content'}}>
+                            <NewAssessmentFormInput inputNumber={1} inputPlaceholderText={inputPlaceholderText} updateInputValue={handleUpdateInputValue}/>
+                        </div>
+                        {
+                            <NewAssessmentFormInputSVGContainer>
+                                <div>
+                                    <svg onClick={() => handleAddInstance(1)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                    <svg onClick={() => handleDeleteInstance(1)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                                </div>
+                            </NewAssessmentFormInputSVGContainer>
+                        }
+                    </NewAssessmentFormInputContainerSUPER>
+                    <NewAssessmentFormSuggestionInput placeholder={inputPlaceholderText2}></NewAssessmentFormSuggestionInput>
+                </NewAssessmentFormInputContainerSUPERDUPER>
 
                 {inputInstances.map((component, index) => (
                     <React.Fragment key={index}>
-                        <NewAssessmentFormInputContainerSUPER>
-                            <div style={{width: 'fit-content'}}>{component}</div>
-                            {/* <NewAssessmentFormInputContainerDivider/> */}
-                            {
-                                <NewAssessmentFormInputSVGContainer>
-                                    <div>
-                                        <svg onClick={() => handleAddInstance(index+1)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                                        <svg onClick={() => handleDeleteInstance(index)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
-                                    </div>
-                                </NewAssessmentFormInputSVGContainer>
-                            }
-                        </NewAssessmentFormInputContainerSUPER>
+                        <NewAssessmentFormInputContainerSUPERDUPER>
+                            <NewAssessmentFormInputContainerSUPER>
+                                <div style={{width: 'fit-content'}}>{component}</div>
+                                {/* <NewAssessmentFormInputContainerDivider/> */}
+                                {
+                                    <NewAssessmentFormInputSVGContainer>
+                                        <div>
+                                            <svg onClick={() => handleAddInstance(index+1)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                            <svg onClick={() => handleDeleteInstance(index)} style={{display: `${'block'}`}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                                        </div>
+                                    </NewAssessmentFormInputSVGContainer>
+                                }
+                            </NewAssessmentFormInputContainerSUPER>
+                            <NewAssessmentFormSuggestionInput placeholder={inputPlaceholderText2}></NewAssessmentFormSuggestionInput>
+                        </NewAssessmentFormInputContainerSUPERDUPER>
                     </React.Fragment>
                 ))}
 
@@ -167,6 +195,7 @@ const NewAssessmentFormColumnNames = styled.div`
     display: flex;
     flex-direction: row;
     margin: 10px 0px;
+    margin: 20px;
     /* background-color: green; */
     & p {
         font-size: 10pt;
@@ -203,6 +232,7 @@ const NewAssessmentFormInputSVGContainer  = styled.div`
             margin: auto 6px;
         }
 `;
+
 const NewAssessmentFormInputContainerSUPER  = styled.div`
     display: flex;
     flex-direction: row;
@@ -210,6 +240,18 @@ const NewAssessmentFormInputContainerSUPER  = styled.div`
     width: 100%;
     /* background-color: cyan; */
 `;
+const NewAssessmentFormInputContainerSUPERDUPER  = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    margin: 10px auto;
+    padding: 10px 0px;
+    /* background-color: rgb(230, 230, 230); */
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 10px;
+`;
+
 const NewAssessmentsSubmitButton = styled.div`
     cursor: pointer;
     scale: .9;
@@ -230,6 +272,14 @@ const NewAssessmentsSubmitButton = styled.div`
 `;
 
 const NewAssessmentFormMiscInputsContainer = styled.div`
+    margin: 10px auto;
+    /* background-color: red; */
+    & label {
+        font-size: 10pt;
+        margin-top: 10px;
+        margin-left: 70px;
+        margin-bottom: -5px;
+    }
     & input {
         /* flex: 0 0 50%; */
         font-size: 9pt;
@@ -239,7 +289,7 @@ const NewAssessmentFormMiscInputsContainer = styled.div`
         width: 300px;
         margin: 10px auto;
         padding-left: 7px;
-        background-color: rgb(215, 215, 215);
+        background-color: rgb(225, 225, 225);
         box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
         outline: none;
         border-radius: 50px;
@@ -247,5 +297,41 @@ const NewAssessmentFormMiscInputsContainer = styled.div`
     & input::placeholder {
         user-select: none;
     }
+    & input[type=number]::-webkit-inner-spin-button,
+    & input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+`;
+
+const NewAssessmentFormVerticalDivider = styled.div`
+    flex: 1;
+    height: 1px;
+    margin: 0px auto;
+    margin-top: auto;
+    background-color: rgb(200, 200, 200);
+`;
+
+const NewAssessmentFormSuggestionInput = styled.input`
+
+    /* flex: 0 0 50%; */
+    font-size: 9pt;
+    // text-align: center;
+    text-indent: 7px;
+    height: 30px;
+    width: 300px;
+    margin: 10px auto;
+    margin-top: 0px;
+    padding-left: 7px;
+    background-color: rgb(225, 225, 225);
+    box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
+    outline: none;
+    border-radius: 50px;
+    &::placeholder {
+        user-select: none;
+    }
+
+
 `;
 export default NewAssessmentForm;

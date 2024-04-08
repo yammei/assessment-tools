@@ -150,11 +150,9 @@ const AssessmentsComponentContainer = styled.div`
 const AssessmentSelectionContainer = styled.div`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     width: 1000px;
-    overflow: scroll;
-    &::-webkit-scrollbar {
-        display: none;
-    }
+
 `;
 
 const AssessmentSectionContainer = styled.div`
