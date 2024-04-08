@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -336,4 +336,4 @@ const NewAssessmentFormSuggestionInput = styled.input`
 
 
 `;
-export default NewAssessmentForm;
+export default memo(NewAssessmentForm);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import ExistingAssessments from './ExistingAssessments';
 import NewAssessmentForm from './NewAssessmentForm';
@@ -31,6 +31,8 @@ import NewAssessmentForm from './NewAssessmentForm';
 const ManageAssessmentsContainer = styled.div`
     display: flex;
     flex-direction: column;
+    height: 80vh;
+    overflow: auto;
 `;
 
 const ManageAssessmentsButton = styled.div`
@@ -63,4 +65,4 @@ const ManageAssessmentsLists = styled.div`
         margin: auto;
     }
 `;
-export default ManageAssessments;
+export default memo(ManageAssessments);

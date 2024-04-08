@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import styled from 'styled-components';
 
 const NewAssessmentFormInput = (props) => {
@@ -103,4 +103,4 @@ const NewAssessmentFormInputSVGContainer  = styled.div`
         }
 `;
 
-export default NewAssessmentFormInput;
+export default memo(NewAssessmentFormInput);

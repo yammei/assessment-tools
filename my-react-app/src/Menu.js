@@ -1,8 +1,6 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 
-import Scores from './Scores';
 import Logout from './Logout';
-import History from './History';
 
 const Menu = (props) => {
 
@@ -32,6 +30,7 @@ const Menu = (props) => {
                         <div className='Menu-Content-Seperator'/>
                         <p onClick={() => handleShowContentComponent(1)}>Assessment History</p>
                         <p onClick={() => handleShowContentComponent(2)}>Manage Assessments</p>
+                        {props.darkMode ? <p onClick={props.toggleDarkMode}>Switch Light Mode</p> : <p onClick={props.toggleDarkMode}>Switch Dark Mode</p>}
                         <div className='Menu-Content-Seperator'/>
                         <Logout/>
                     </div>
@@ -44,4 +43,4 @@ const Menu = (props) => {
 
 };
 
-export default Menu;
+export default memo(Menu);

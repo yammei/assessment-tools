@@ -1,3 +1,12 @@
+.dark-mode {
+  filter: invert(100%);
+  transition: filter 1s ease;
+}
+.light-mode {
+  filter: invert(0%);
+  transition: filter 1s ease;
+}
+
 .App {
   display: flex;
   flex-direction: column;
@@ -6,6 +15,8 @@
   height: 100vh;
   width: 100vw;
   background-color: red;
+  /* filter: invert(100%); */
+
 }
 .App-Background {
   position: fixed;
@@ -270,11 +281,13 @@
 }
 
 .MainPage {
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100vh;
   width: 100vw;
+  /* filter: invert(100%); */
   /* background-color: rgb(75,75,75); */
 }
 .MainPage-Navigation-Bar {
@@ -303,7 +316,7 @@
   padding: 10px 0px;
   background-color: rgba(0, 0, 0, .3);
   filter: blur(25px);
-  backdrop-filter: blur(20px) brightness(1);
+  /* backdrop-filter: blur(20px) brightness(1); */
   z-index: 9998;
 }
 .MainPage-Navigation-Bar-Push {
@@ -341,8 +354,8 @@
 .MiscPage {
   height: fit-content;
   align-items: center;
-  width: 600px;
-  padding: 20px;
+  width: 680px;
+  padding: 40px;
   background-color: rgb(235,235,235);
   border-radius: 10px;
 }
@@ -353,7 +366,7 @@
   height: 100vh;
   width: 100vw;
   background-color: rgba(0, 0, 0, .3);
-  backdrop-filter: blur(1px) brightness(1);
+  /* backdrop-filter: brightness(1); */
   z-index: 9998;
 }
 
