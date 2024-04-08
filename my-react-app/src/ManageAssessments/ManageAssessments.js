@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import CustomAssessment from './CustomAssessment';
 import NewAssessmentForm from './NewAssessmentForm';
 
  const ManageAssessments = () => {
@@ -21,7 +20,6 @@ import NewAssessmentForm from './NewAssessmentForm';
 
             <ManageAssessmentsLists>
                 <p>My Assessments</p>
-                <CustomAssessment/>
             </ManageAssessmentsLists>
 
         </ManageAssessmentsContainer>
@@ -46,6 +44,7 @@ const ManageAssessmentsButton = styled.div`
         background-color: rgb(0, 116, 224);
     }
     & p {
+        user-select: none;
         color: rgb(235,235,235);
         margin: auto;
     }
@@ -56,5 +55,11 @@ const ManageAssessmentsLists = styled.div`
     width: inherit;
     margin: 10px 0px;
     border: 3px dashed rgb(200, 200, 200);
+    /* background-color: red; */
+    & p {
+        height: fit-content;
+        width: fit-content;
+        margin: auto;
+    }
 `;
 export default ManageAssessments;

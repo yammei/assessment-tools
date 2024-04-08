@@ -106,6 +106,25 @@ app.get('/api/getscore2/:userId', (req, res) => {
   });
 });
 
+app.get('/getScoreCustom/:userId/:customAssessmentId', (req, res) => {
+  const userId = req.params.userId;
+  const customAssessmentId = req.params.customAssessmentId;
+
+  console.log(`SELECT score FROM user${userId}CustomScores WHERE assessmentId=${customAssessmentId}`);
+
+  db.get(`SELECT score FROM user${userId}CustomScores WHERE assessmentId=${customAssessmentId}`, (err, row) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    if (row) {
+      res.json({ score: row.score });
+    } else {
+      res.json({ score: 0 });
+    }
+  });
+});
+
 function authenticateUser(username, password, callback) {
   console.log("Function Reached: authenticateUser()");
   const query = 'SELECT * FROM users WHERE username = ?';
@@ -230,6 +249,42 @@ app.post('/api/score2/:userId', (req, res) => {
   updateStmt.finalize();
 });
 
+// SUBMIT: Custom assessment scores.
+app.post('/api/scoresCustom/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { assessmentId, assessmentName, scoreDistribution } = req.body;
+
+  if (!scoreDistribution || !Array.isArray(scoreDistribution)) {
+    res.status(400).json({ error: 'Invalid input.' });
+    return;
+  }
+
+  const scoreSum = scoreDistribution.reduce((acc, num) => acc + num, 0);
+
+  const initStmt = `CREATE TABLE IF NOT EXISTS user${userId}CustomScores(assessmentId INTEGER, assessment TEXT, score INTEGER, scoreDist TEXT, date DATE, time TIME);`;
+
+  db.run(initStmt, (err) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+
+    const assessmentScoreDistribution = JSON.stringify(scoreDistribution);
+    const insertStmt = db.prepare(`INSERT INTO user${userId}CustomScores (assessmentId, assessment, score, scoreDist, date, time) VALUES (?, ?, ?, ?, DATE('now'), TIME('now'))`);
+    console.log(`assessmentId: ${assessmentId}, assessmentName: ${assessmentName}, scoreSum: ${scoreSum}, scoreDistribution: ${scoreDistribution}, `);
+
+    insertStmt.run(assessmentId, assessmentName, scoreSum, assessmentScoreDistribution, (err) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+
+      res.status(200).json({ message: 'Custom assessment scores submitted successfully!' });
+    });
+  });
+});
+
+
 // Posts user's assessment score in user's archive.
 app.post('/api/archiveScore/:userId', (req, res) => {
   console.log("The 'archiveScore' Endpoint has been reached.");
@@ -273,53 +328,94 @@ app.get('/api/getArchiveScore/:userId/:numOfEntries/:assessmentName', (req, res)
 });
 
 
-//NEW ASSESSMENT: Creates new assessment.
+// NEW ASSESSMENT: Creates new assessment.
 app.post('/newAssessment', async (req, res) => {
-  const { userId, assessmentName, assessmentEntries, assessmentRatingNum } = req.body;
+  const { 
+    userId, 
+    assessmentName, 
+    assessmentDescription, 
+    assessmentEntries, 
+    assessmentRatingNum, 
+    assessmentSuggestions
+  } = req.body;
 
   const createTableStmt = `
     CREATE TABLE IF NOT EXISTS user${userId}Assessments 
     (
       assessmentId INTEGER PRIMARY KEY AUTOINCREMENT, 
       assessmentName TEXT, 
+      assessmentDescription TEXT, 
       assessmentEntries TEXT, 
-      assessmentRatingNum INTEGER
+      assessmentRatingNum INTEGER,
+      assessmentSuggestions TEXT
     )
   `;
 
+  // Execute the CREATE TABLE statement first
   db.run(createTableStmt, (err) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
 
-    const insertStmt = `
-      INSERT INTO user${userId}Assessments 
-      (
-        assessmentName, 
-        assessmentEntries, 
-        assessmentRatingNum
-      )
-      VALUES (?, ?, ?)
+    const countRowsStmt = `
+      SELECT COUNT(*) AS count
+      FROM user${userId}Assessments
     `;
 
-    db.run(insertStmt, [assessmentName, JSON.stringify(assessmentEntries), assessmentRatingNum], function(err) {
+    // Execute the query to count the number of existing rows
+    db.get(countRowsStmt, (err, row) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
 
-      res.json({ message: 'New assessment created successfully!' });
+      const rowCount = row.count;
+
+      if (rowCount >= 5) {
+        return console.log('Maximum capacity reached. Cannot add more assessments.');
+      }
+
+      const insertStmt = `
+        INSERT INTO user${userId}Assessments
+        (
+          assessmentName,
+          assessmentDescription,
+          assessmentEntries,
+          assessmentRatingNum,
+          assessmentSuggestions
+        )
+        VALUES
+        (
+          '${assessmentName}',
+          '${assessmentDescription}',
+          '${JSON.stringify(assessmentEntries)}',
+          ${assessmentRatingNum},
+          '${assessmentSuggestions}'
+        )
+      `;
+
+      console.log("Insert Statement:", insertStmt);
+
+      db.run(insertStmt, (err) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+
+        res.json({ message: 'New assessment created successfully!' });
+      });
     });
   });
 });
 
 //GET ASSESSMENT: Retrieves existing assessment.
-app.post('/getAssessment', async (req, res) => {
-  const { userId, assessmentName } = req.body;
+app.get('/getAssessment', (req, res) => {
+  const { userId, assessmentName } = req.query;
+  console.log(userId, assessmentName);
 
   const selectStmt = `
     SELECT assessmentId, assessmentName, assessmentEntries, assessmentRatingNum 
     FROM user${userId}Assessments
     WHERE assessmentName = ?
+    LIMIT 1;
   `;
 
   db.get(selectStmt, [assessmentName], (err, row) => {
@@ -331,6 +427,29 @@ app.post('/getAssessment', async (req, res) => {
       res.json({ assessment: row });
     } else {
       res.status(404).json({ message: 'No assessment found for this user with the provided name' });
+    }
+  });
+});
+
+//GET ASSESSMENT NAMES: Retrieves existing assessment.
+app.get('/getAssessmentNames', (req, res) => {
+  const { userId } = req.query;
+  console.log(userId);
+
+  const selectStmt = `
+    SELECT assessmentId, assessmentName
+    FROM user${userId}Assessments
+  `;
+
+  db.all(selectStmt, (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (rows && rows.length > 0) {
+      res.json({ assessments: rows });
+    } else {
+      res.status(404).json({ message: 'No assessments found for this user' });
     }
   });
 });

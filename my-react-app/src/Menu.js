@@ -28,7 +28,7 @@ const Menu = (props) => {
                 {
                 displayMenuContents ?
                     <div className='Menu-Content'>
-                        <p onClick={() => handleShowContentComponent(0)}>Account Settings (Dead)</p>
+                        <p onClick={() => handleShowContentComponent(0)}>Account Settings (In Dev.)</p>
                         <div className='Menu-Content-Seperator'/>
                         <p onClick={() => handleShowContentComponent(1)}>Assessment History</p>
                         <p onClick={() => handleShowContentComponent(2)}>Manage Assessments</p>

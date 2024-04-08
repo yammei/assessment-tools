@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const NewAssessmentFormInput = (props) => {
-    const number = props.inputNumber;
-    const inputPlaceholderText = props.inputPlaceholderText;
+    const [ number, setNumber ] = useState(props.inputNumber);
+    const [ inputPlaceholderText, setInputPlaceholderText ] = useState(props.inputPlaceholderText);
     const [ displayAdd, setDisplayAdd ] = useState(`none`);
     const [ displayRemove, setDisplayRemove ] = useState(`none`);
 
-    console.log("NewAssessmentFormInput: ", "add func: ", props.addInstanceFunction);
+    // console.log("NewAssessmentFormInput: ", "add func: ", props.addInstanceFunction);
 
     useEffect(() => {
         if (props.inputDisplayAdd) {
@@ -18,12 +18,19 @@ const NewAssessmentFormInput = (props) => {
         }
     }, [props.inputDisplayAdd, props.inputDisplayRemove]);
 
+    const handleTextInputChange = (event) => {
+        props.updateInputValue(event.target.value, number);
+        // console.log(event.target.value);
+        // setInputPlaceholderText(event.target.value);
+        // console.log(event.target.value);
+    };
+
     return(
         <NewAssessmentFormInputContainer>
 
             <label for='QueryInput'>{number}</label>
             <NewAssessmentFormInputContainerDivider/>
-            <input id='QueryInput' placeholder={inputPlaceholderText}></input>
+            <input id='QueryInput' placeholder={inputPlaceholderText} onChange={handleTextInputChange}></input>
             <NewAssessmentFormInputContainerDivider/>
             {/* <NewAssessmentFormInputSVGContainer>
                 <div>
@@ -41,27 +48,31 @@ const NewAssessmentFormInputContainer = styled.div`
     flex-direction: row;
     margin: 15px 0px;
     /* width: min-content; */
-    background-color: brown;
+    /* background-color: brown; */
     & label {
         font-size: 10pt;
         text-align: center;
-        flex: 0 0 10%;
+        /* flex: 0 0 10%; */
+        width: 50px;
         margin: auto 0px;
         /* background-color: blue; */
     }
     & input {
-        flex: 0 0 50%;
+        /* flex: 0 0 50%; */
         font-size: 9pt;
         // text-align: center;
         text-indent: 7px;
         height: 30px;
-        width: 500px;
-        margin: auto 0px;
+        width: 300px;
+        margin: auto;
         padding-left: 7px;
         background-color: rgb(215, 215, 215);
         box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
         outline: none;
         border-radius: 50px;
+    }
+    & input::placeholder {
+        user-select: none;
     }
 `;
 
