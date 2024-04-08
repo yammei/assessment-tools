@@ -66,7 +66,7 @@ const NewAssessmentFormInputContainer = styled.div`
         width: 300px;
         margin: auto;
         padding-left: 7px;
-        background-color: rgb(225, 225, 225);
+        background-color: rgb(250, 250, 250);
         box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
         outline: none;
         border-radius: 50px;

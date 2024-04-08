@@ -226,10 +226,13 @@ const NewAssessmentFormInputSVGContainer  = styled.div`
         }
         & svg {
         cursor: pointer;
-            fill: rgb(20, 20, 20);
+            fill: rgb(100, 100, 100);
             height: 13px;
             width: auto;
             margin: auto 6px;
+        }
+        & svg:hover {
+            fill: rgb(20, 20, 20);
         }
 `;
 
@@ -246,9 +249,9 @@ const NewAssessmentFormInputContainerSUPERDUPER  = styled.div`
     height: fit-content;
     width: fit-content;
     margin: 10px auto;
-    padding: 10px 0px;
-    /* background-color: rgb(230, 230, 230); */
-    border: 1px solid rgb(220, 220, 220);
+    padding: 10px 20px;
+    background-color: rgb(225, 225, 225);
+    // border: 1px solid rgb(220, 220, 220);
     border-radius: 10px;
 `;
 
@@ -291,7 +294,7 @@ const NewAssessmentFormMiscInputsContainer = styled.div`
         width: 300px;
         margin: 10px auto;
         padding-left: 7px;
-        background-color: rgb(225, 225, 225);
+        background-color: rgb(250, 250, 250);
         box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
         outline: none;
         border-radius: 50px;
@@ -326,7 +329,7 @@ const NewAssessmentFormSuggestionInput = styled.input`
     margin: 10px auto;
     margin-top: 0px;
     padding-left: 7px;
-    background-color: rgb(225, 225, 225);
+    background-color: rgb(250, 250, 250);
     box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
     outline: none;
     border-radius: 50px;

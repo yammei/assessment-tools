@@ -50,9 +50,10 @@ const ExistingAssessmentsRowContainer = styled.div`
     flex-direction: row;
     height: 40px;
     width: 500px;
-    margin: 15px auto;
-    border: 1px solid rgb(220, 220, 220);
-    border-radius: 5px;
+    margin: 10px auto;
+    background-color: rgb(225, 225, 225);
+    // border: 1px solid rgb(220, 220, 220);
+    border-radius: 10px;
 `;
 
 const ExistingAssessmentsInfo = styled.div`
