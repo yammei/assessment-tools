@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import ExistingAssessments from './ExistingAssessments';
 import NewAssessmentForm from './NewAssessmentForm';
 
  const ManageAssessments = () => {
@@ -19,7 +20,7 @@ import NewAssessmentForm from './NewAssessmentForm';
             { displayNewAssessmentForm === true && <NewAssessmentForm/> }
 
             <ManageAssessmentsLists>
-                <p>My Assessments (In Dev.)</p>
+                <ExistingAssessments/>
             </ManageAssessmentsLists>
 
         </ManageAssessmentsContainer>

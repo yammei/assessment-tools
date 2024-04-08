@@ -89,9 +89,9 @@ const NewAssessmentForm = (props) => {
 
     return(
         <NewAssessmentFormContainer>
-            <div style={{height: 'fit-content', width: 'inherit', margin: 'auto', padding: '20px', overflow: 'scroll'}}>
+            <div style={{height: 'fit-content', width: 'inherit', margin: 'auto', marginTop: '30px'}}>
 
-                <div style={{display: 'flex', flexDirection: 'row', height: '20px', backgroundColor: ''}}>
+                <div style={{display: 'flex', flexDirection: 'row', height: '20px', marginBottom: '20px', backgroundColor: ''}}>
                     <p style={{height: 'fit-content', width: 'fit-content', whiteSpace: 'nowrap', marginTop: '0px', marginRight: 'auto', paddingRight: '10px', marginBottom: '10px'}}>
                         General Information
                     </p>
@@ -276,8 +276,10 @@ const NewAssessmentFormMiscInputsContainer = styled.div`
     /* background-color: red; */
     & label {
         font-size: 10pt;
+        width: 300px;
+        margin: 0px auto;
         margin-top: 10px;
-        margin-left: 70px;
+        // margin-left: 70px;
         margin-bottom: -5px;
     }
     & input {
