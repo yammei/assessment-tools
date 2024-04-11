@@ -15,9 +15,10 @@ const PopOutWindow = (props) => {
     const PopOutWindowBarStyle = {
         display: 'flex',
         flexDirection: 'row',
-        height: '50px',
+        height: '30px',
         width: `${PopOutWindowWidth}`,
-        backgroundColor: `${PopOutWindowColor}`,
+        // backgroundColor: `${PopOutWindowColor}`,
+        backgroundColor: 'rgb(235,235,235)',
         borderRadius: '25px 25px 0px 0px',
         zIndex: '9999'
     };
@@ -26,18 +27,20 @@ const PopOutWindow = (props) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        height: 'fit-content',
+        height: '300px',
         width: '500px',
+        marginTop: '10px',
         padding: '25px 0px',
         backgroundColor: 'rgb(235,235,235)',
         borderRadius: '0px 0px 25px 25px',
+        overflow: 'scroll',
         zIndex: '9998'
     };
 
     const PopOutWindowBarTitleStyle = {
-        color: 'rgb(235,235,235)',
-        fontSize: '20pt',
-        fontWeight: 'bold',
+        color: 'rgb(50,50,50)',
+        fontSize: '15pt',
+        // fontWeight: 'bold',
         textAlign: 'center',
         width: `${PopOutWindowWidth/2}px`,
         margin: 'auto 0px',
@@ -60,7 +63,10 @@ const PopOutWindow = (props) => {
             <div className="PopOutWindow-Body" style={PopOutWindowBodyStyle}>
                 {Array.isArray(PopOutWindowTexts) ? (
                     PopOutWindowTexts.map((text, index) => (
-                        <p key={index}>{text}</p>
+                        <div>
+                            <p style={{margin: '10px 0px', padding: '0px 20px',}} key={index}>{text}</p>
+                            <PopOutWindowDivider/>
+                        </div>
                     ))
                 ) : (
                     <p>Nothing to see here...</p>
@@ -74,6 +80,9 @@ const PopOutWindowContainer = styled.div`
     display: ${(props) => props.display};
     height: fit-content;
     width: fit-content;
+    scale: .9;
+    margin: 0px auto;
+    padding: 20px;
     box-shadow: 0 0px 15px rgba(0, 0, 0, .25);
     border-radius: 25px;
     z-index: 9997;
@@ -82,14 +91,26 @@ const PopOutWindowContainer = styled.div`
     }
     #PopOutWindow-Bar-Exit {
         cursor: pointer;
-        fill: rgb(235,235,235);
+        fill: rgb(100,100,100);
         vertical-align: middle;
         margin-top: auto;
         margin-left: auto;
-        margin-right: 10px;
+        margin-right: 5px;
         margin-bottom: auto;
-        height: 30px;
+        height: 25px;
     }
+    #PopOutWindow-Bar-Exit:hover {
+        fill: rgb(75,75,75);
+    }
+
 `;
 
+const PopOutWindowDivider = styled.div`
+    /* flex: 1; */
+    height: 1px;
+    width: 90%;
+    margin: 15px auto;
+    background-color: rgb(200, 200, 200);
+    /* background-color: red; */
+`;
 export default PopOutWindow;

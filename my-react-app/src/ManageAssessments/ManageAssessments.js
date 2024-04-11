@@ -4,11 +4,20 @@ import ExistingAssessments from './ExistingAssessments';
 import NewAssessmentForm from './NewAssessmentForm';
 
  const ManageAssessments = () => {
-    const [displayNewAssessmentForm, setDisplayNewAssessmentForm] = useState(false);
+    const [ displayNewAssessmentForm, setDisplayNewAssessmentForm ] = useState(false);
+    const [ updateAssessmentFormData, setUpdateAssessmentFormData ] = useState();
 
     const handleNewAssessmentClick = () => {
         // console.log(`Reached handleNewAssessmentClick() from Management.js`);
-        setDisplayNewAssessmentForm(true);
+        setDisplayNewAssessmentForm(!displayNewAssessmentForm);
+    };
+
+    const transferAssessmentDataForUpdate = (aID, data) => {
+        console.log(`Transferring aID ${aID} data for update.`);
+        console.log(`aID ${aID} data: ${data}`);
+        setUpdateAssessmentFormData(data);
+        console.log("new data:", data);
+        console.log(updateAssessmentFormData);
     };
 
     return(
@@ -17,10 +26,10 @@ import NewAssessmentForm from './NewAssessmentForm';
                 <p>New Assessment</p>
             </ManageAssessmentsButton>
 
-            { displayNewAssessmentForm === true && <NewAssessmentForm/> }
+            { displayNewAssessmentForm === true && <NewAssessmentForm updateAssessmentFormData={updateAssessmentFormData}/> }
 
             <ManageAssessmentsLists>
-                <ExistingAssessments/>
+                <ExistingAssessments transferAssessmentDataForUpdate={transferAssessmentDataForUpdate} displayNewAssessmentForm={handleNewAssessmentClick}/>
             </ManageAssessmentsLists>
 
         </ManageAssessmentsContainer>

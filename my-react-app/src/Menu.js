@@ -1,10 +1,16 @@
-import { useState, memo } from 'react';
+import { useState, useEffect } from 'react';
 
 import Logout from './Logout';
 
 const Menu = (props) => {
-
+    const [ username, setUsername ] = useState('');
     const [displayMenuContents, setDisplayMenuContents] = useState(false);
+
+    useEffect(() => {
+        // Retrieve username from localStorage
+        const storedUsername = localStorage.getItem('username');
+        setUsername(storedUsername);
+    }, []);
 
     const handleMenuClick = () => {
         setDisplayMenuContents(!displayMenuContents);
@@ -26,7 +32,8 @@ const Menu = (props) => {
                 {
                 displayMenuContents ?
                     <div className='Menu-Content'>
-                        <p onClick={() => handleShowContentComponent(0)}>Account Settings (In Dev.)</p>
+                        {/* <p onClick={() => handleShowContentComponent(0)}>Hello, {username}!</p> */}
+                        <p>Hello, {username}!</p>
                         <div className='Menu-Content-Seperator'/>
                         <p onClick={() => handleShowContentComponent(1)}>Assessment History</p>
                         <p onClick={() => handleShowContentComponent(2)}>Manage Assessments</p>
@@ -43,4 +50,4 @@ const Menu = (props) => {
 
 };
 
-export default memo(Menu);
+export default Menu;

@@ -6,6 +6,7 @@ const NewAssessmentFormInput = (props) => {
     const [ inputPlaceholderText, setInputPlaceholderText ] = useState(props.inputPlaceholderText);
     const [ displayAdd, setDisplayAdd ] = useState(`none`);
     const [ displayRemove, setDisplayRemove ] = useState(`none`);
+    const [ prompt, setPrompt ] = useState(props.updateAssessmentDataValue);
 
     // console.log("NewAssessmentFormInput: ", "add func: ", props.addInstanceFunction);
 
@@ -30,7 +31,7 @@ const NewAssessmentFormInput = (props) => {
 
             <label for='QueryInput'>{number}</label>
             <NewAssessmentFormInputContainerDivider/>
-            <input id='QueryInput' placeholder={inputPlaceholderText} onChange={handleTextInputChange}></input>
+            <input id='QueryInput' placeholder={inputPlaceholderText} value={prompt} onChange={handleTextInputChange}></input>
             <NewAssessmentFormInputContainerDivider/>
             {/* <NewAssessmentFormInputSVGContainer>
                 <div>

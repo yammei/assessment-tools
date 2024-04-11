@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LineGraph from './LineGraph';
 
 const History = () => {
-    const [showHistory, setShowHistory] = useState(false);
+    const [showHistory, setShowHistory] = useState(true);
 
     const handleOnClick = () => {
       setShowHistory(!showHistory);
@@ -10,7 +10,7 @@ const History = () => {
 
     return (
         <div id="History-Container" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <p className="Nav-Bar-Link" onClick={handleOnClick}>View Assessment History</p>
+            {/* <p className="Nav-Bar-Link" onClick={handleOnClick}>View Assessment History</p> */}
             { showHistory && <LineGraph/> }
         </div>
     );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
 
 import History from './History';
@@ -77,27 +78,102 @@ const Scores = ({ userId, isLoggedIn }) => {
     }
   }, []);
 
-
-
   return (
-    <div id='Scores-Container' style={{display: 'flex', flexDirection: 'column'}}>
+    <ScoresContainer>
+      <ScoresContent>
 
-      <p className='Scores-User'>{`${username}'s Scores`}</p>
+        <ScoresContentPart1>
 
-      {scores.map((score, index) => (
-        <p key={index}>Happiness: <b>{score}</b><span className='Scores-Fraction-Text'> of 50</span></p>
-      ))}
+          <TextContainer>
+            <p className='Scores-User'>Your Scores</p>
+            <ScoreContentVerticalDivider/>
 
-      {scores2.map((score, index) => (
-        <p key={index}>Social Self Care: <b>{score}</b><span className='Scores-Fraction-Text'> of 30</span></p>
-      ))}
+            {scores.map((score, index) => (
+              <p key={index}>Happiness: {score}<span className='Scores-Fraction-Text'  style={{fontSize: '11pt'}}> of 50</span></p>
+            ))}
 
-        <p>{assessmentNames[0]}: <b>{customScores[0]}</b><span className='Scores-Fraction-Text'> of {assessmentTotalScore[0]}</span></p>
+            {scores2.map((score, index) => (
+              <p key={index}>Social Self Care: {score}<span className='Scores-Fraction-Text' style={{fontSize: '11pt'}}> of 30</span></p>
+            ))}
 
-      <History/>
+            {/* <p>{assessmentNames[0]}: <b>{customScores[0]}</b><span className='Scores-Fraction-Text'  style={{fontSize: '11pt'}}> of {assessmentTotalScore[0]}</span></p> */}
+          </TextContainer>
 
-    </div>
+        </ScoresContentPart1>
+
+
+        <ScoresContentPart2>
+          <TextContainer>
+            <p>Assessment Score History</p>
+            <ScoreContentVerticalDivider/>
+          </TextContainer>
+          <HistoryContainer><History/></HistoryContainer>
+        </ScoresContentPart2>
+
+      </ScoresContent>
+    </ScoresContainer>
   );
 };
 
 export default Scores;
+
+const ScoresContainer  = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0px 0px;
+  /* border: 3px dashed rgb(200, 200, 200); */
+`;
+
+const ScoresContent  = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: fit-content;
+  margin: auto;
+`;
+
+const ScoresContentPart1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: 600px;
+  margin: 20px auto;
+  /* background-color: red; */
+  border: 3px dashed rgb(200, 200, 200);
+  p {
+    margin: 5px;
+  }
+`;
+
+const TextContainer = styled.div`
+    height: fit-content;
+    width: 500px;
+    margin: auto;
+    padding: 20px 0px;
+`;
+
+const ScoresContentPart2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: 600px;
+  margin: 20px auto;
+  /* background-color: red; */
+  border: 3px dashed rgb(200, 200, 200);
+`;
+
+const HistoryContainer = styled.div`
+    height: fit-content;
+    width: fit-content;
+    scale: .8;
+    margin: auto;
+`;
+
+const ScoreContentVerticalDivider = styled.div`
+    /* flex: 1; */
+    height: 1px;
+    width: 500px;
+    margin: 0px auto;
+    background-color: rgb(200, 200, 200);
+    /* background-color: red; */
+`;

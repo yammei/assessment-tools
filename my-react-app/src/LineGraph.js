@@ -57,27 +57,26 @@ const LineGraph = (props) => {
 
     // STYLE: Component background.
     const lineGraphBackgroundStyle = {
-        position: 'absolute',
-        transform: 'translateX(-50%)',
+        // position: 'absolute',
+        // transform: 'translateX(-50%)',
         // left: '-50%',
-        marginTop: '50px',
+        // marginTop: '50px',
         padding: '45px 25px 40px 5px',
         height: `fit-content`,
         width: `${containerWidth}px`,
-        borderRadius: '25px',
+        // scale: '.8',
+        borderRadius: '10px',
         backgroundColor: 'rgb(235,235,235)',
-        boxShadow: '0 0px 15px rgba(0, 0, 0, .25)',
+        // boxShadow: '0 0px 15px rgba(0, 0, 0, .25)',
     };
 
     return (
-        <LineGraphContainer>
             <div className="LineGraph-Background" style={lineGraphBackgroundStyle}>
                 {/* SUB-COMPONENT Part 1A/B */}
                 <LineGraphScoreAndComponent scoreRange={scoreRange} componentData1={componentAssessment1Data} componentData2={componentAssessment2Data} componentSize={componentSize} componentSections={componentSections} datesWidth={datesWidth}/>
                 {/* SUB-COMPONENT Part 2 */}
                 <LineGraphDates datesData1={datesAssessment1Data} datesData2={datesAssessment2Data} datesWidth={datesWidth}/>
             </div>
-        </LineGraphContainer>
     );
 };
 
@@ -85,6 +84,9 @@ const LineGraph = (props) => {
 const LineGraphContainer = styled.div`
     display: flex;
     flex-direction: column;
+    scale: .9;
+    /* background-color: red; */
+    z-index: 9998;
     overflow: hidden;
     p {
         user-select: none;

@@ -17,25 +17,38 @@ const ExistingAssessments = (props) => {
     const getAssessmentData = async () => {
         const apiUrl = `http://localhost:4000/getAssessmentData?userId=${storedUserId}`;
         const response = await axios.get(apiUrl);
-        const assessmentData = response.data.assessments; 
+        const assessmentData = response.data.assessments;
         setExistingAssessmentsInstances(assessmentData);
+        console.log("kore9", existingAssessmentsInstances);
     };
 
-    const updateAssessment = async () => {
+    const updateAssessment = async (aID) => {
         console.log("updateAssessment()");
-  
-    };
-
-    const addAssessment = async () => {
-        console.log("addAssessment()");
         // Activate "NewAssesssmentForm.js" and pass assessment data to input fields
+        props.displayNewAssessmentForm();
         // On submission, update previous version of assessment
+        var index = 0;
+        for (let i=0; i < existingAssessmentsInstances.length; i++) {
+            if (existingAssessmentsInstances[i].assessmentId === aID) {
+                // console.log(`Now comparing ${existingAssessmentsInstances[i].assessmentId} and ${aID}`);
+                console.log(existingAssessmentsInstances[i]);
+                index = i;
+            }
+        }
+        console.log("2", existingAssessmentsInstances[index]);
+
+        props.transferAssessmentDataForUpdate(aID, existingAssessmentsInstances[index]);
     };
 
-    const deleteAssessment = async () => {
-        console.log("deleteAssessment()");
+    const deleteAssessment = async (aID) => {
         // API call to backend to delete assessment entry in userXAssessments
+        console.log("deleteAssessment()", aID);
+        const apiUrl = `http://localhost:4000/deleteAssessment/${storedUserId}/${aID}`;
+        const response = await axios.delete(apiUrl);
+        console.log(response);
+
         // Referesh page
+        window.location.href = '/MainPage'; // Hacky fix. Ideally this would call a global state for only the necessary components that need reloading.
     };
 
     // useEffect(() =>{const meow = 0;}, []);
@@ -64,39 +77,39 @@ const ExistingAssessments = (props) => {
                     <p style={{width: '50px', marginRight: 'auto', marginLeft: '0px', backgroundColor: ''}}>Tools</p>
             </ExistingAssessmentsInfo>
 
-            { 
+            {
                 existingAssessmentsInstances[0] ?
-                <ExistingAssessmentsRow index={0} addAssessment={addAssessment} deleteAssessment={deleteAssessment}/> 
-                : 
-                '' 
+                <ExistingAssessmentsRow index={0} updateAssessment={updateAssessment} deleteAssessment={deleteAssessment} aID={existingAssessmentsInstances[0].assessmentId}/>
+                :
+                ''
             }
 
-            { 
+            {
                 existingAssessmentsInstances[1] ?
-                <ExistingAssessmentsRow index={1} addAssessment={addAssessment} deleteAssessment={deleteAssessment}/> 
-                : 
-                '' 
+                <ExistingAssessmentsRow index={1} updateAssessment={updateAssessment} deleteAssessment={deleteAssessment} aID={existingAssessmentsInstances[1].assessmentId}/>
+                :
+                ''
             }
 
-            { 
+            {
                 existingAssessmentsInstances[2] ?
-                <ExistingAssessmentsRow index={2} addAssessment={addAssessment} deleteAssessment={deleteAssessment}/> 
-                : 
-                '' 
+                <ExistingAssessmentsRow index={2} updateAssessment={updateAssessment} deleteAssessment={deleteAssessment} aID={existingAssessmentsInstances[2].assessmentId}/>
+                :
+                ''
             }
 
-            { 
+            {
                 existingAssessmentsInstances[3] ?
-                <ExistingAssessmentsRow index={3} addAssessment={addAssessment} deleteAssessment={deleteAssessment}/> 
-                : 
-                '' 
+                <ExistingAssessmentsRow index={3} updateAssessment={updateAssessment} deleteAssessment={deleteAssessment} aID={existingAssessmentsInstances[3].assessmentId}/>
+                :
+                ''
             }
 
-            { 
+            {
                 existingAssessmentsInstances[4] ?
-                <ExistingAssessmentsRow index={4} addAssessment={addAssessment} deleteAssessment={deleteAssessment}/> 
-                : 
-                '' 
+                <ExistingAssessmentsRow index={4} updateAssessment={updateAssessment} deleteAssessment={deleteAssessment} aID={existingAssessmentsInstances[4].assessmentId}/>
+                :
+                ''
             }
         </ExistingAssessmentsContainer>
     );

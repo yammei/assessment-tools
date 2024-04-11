@@ -5,15 +5,33 @@ import axios from 'axios';
 import NewAssessmentFormInput from './NewAssessmentFormInput';
 
 const NewAssessmentForm = (props) => {
+    const [updateData, setUpdateData] = useState(props.updateAssessmentFormData); // Contains .assessmentName, .assessmentDescription, .assessmentRatingNum
+    const [updateDataEntries, setUpdateDataEntries] = useState('');
     const [inputInstances, setInputInstances] = useState([]);
-    const [inputInstancesText, setInputInstancesText] = useState([]);
+    const [inputInstancesText, setInputInstancesText] = useState([]);   // Array for assessment entries.
+    const [inputSuggestionText, setInputSuggestionText] = useState([]);   // Array for assessment suggestions.
     const inputPlaceholderText = 'Prompt (Max. 30 Characters)';
     const inputPlaceholderText2 = 'Treatment (Max. 100 Characters)';
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [scale, setScale] = useState('');
-    const [suggestions, setSuggestions] = useState('');
+    const [entries, setEntries] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
+
+    useEffect(() => {
+        if (typeof props.updateAssessmentFormData !== 'undefined') {
+            console.log("Trying to update new assessment form data with: ");
+            console.log(updateData);
+            setName(props.updateAssessmentFormData.assessmentName || '');
+            setDescription(props.updateAssessmentFormData.assessmentDescription || '');
+            setScale(props.updateAssessmentFormData.assessmentRatingNum || '');
+            setEntries(props.updateAssessmentFormData.assessmentEntries || []);
+            setSuggestions(props.updateAssessmentFormData.assessmentSuggestions || []);
+        }
+        // console.log(suggestions);
+    }, [props.updateAssessmentFormData]);
+    
 
     useEffect(() => {
     }, [inputInstances]);
@@ -34,10 +52,12 @@ const NewAssessmentForm = (props) => {
                     addInstanceFunction={handleAddInstance}
                     deleteInstanceFunction={handleDeleteInstance}
                     updateInputValue={handleUpdateInputValue}
+                    updateAssessmentDataValue={entries[index+1]}
                 />
             );
             // sortInstanceArray();
             setInputInstances(newArray);
+            console.log("entry value: ", entries[index+1]);
         } else {
             console.log("Maximum query/statement instances reached.");
         }
@@ -82,9 +102,20 @@ const NewAssessmentForm = (props) => {
             assessmentDescription: description,
             assessmentEntries: inputInstancesText.slice(1, inputInstancesText.length),
             assessmentRatingNum: scale,
-            assessmentSuggestions: suggestions,
+            assessmentSuggestions: inputSuggestionText,
         });
+        console.log(inputSuggestionText);
         window.location.href = '/MainPage';
+    };
+
+    const handleSuggestionInputChange = (event, number) => {
+        const { value } = event.target;
+        setInputSuggestionText((prevText) => {
+            const newText = [...prevText];
+            newText[number] = value;
+            return newText;
+        });
+        console.log(`Suggestion # ${number} is now: ${value}`);
     };
 
     return(
@@ -132,7 +163,7 @@ const NewAssessmentForm = (props) => {
                 <NewAssessmentFormInputContainerSUPERDUPER>
                     <NewAssessmentFormInputContainerSUPER>
                         <div style={{width: 'fit-content'}}>
-                            <NewAssessmentFormInput inputNumber={1} inputPlaceholderText={inputPlaceholderText} updateInputValue={handleUpdateInputValue}/>
+                            <NewAssessmentFormInput inputNumber={1} updateAssessmentDataValue={entries[0]} inputPlaceholderText={inputPlaceholderText} updateInputValue={handleUpdateInputValue}/>
                         </div>
                         {
                             <NewAssessmentFormInputSVGContainer>
@@ -143,7 +174,7 @@ const NewAssessmentForm = (props) => {
                             </NewAssessmentFormInputSVGContainer>
                         }
                     </NewAssessmentFormInputContainerSUPER>
-                    <NewAssessmentFormSuggestionInput placeholder={inputPlaceholderText2}></NewAssessmentFormSuggestionInput>
+                    <NewAssessmentFormSuggestionInput placeholder={inputPlaceholderText2} value={suggestions[0]} onChange={(event) => handleSuggestionInputChange(event, 0)}></NewAssessmentFormSuggestionInput>
                 </NewAssessmentFormInputContainerSUPERDUPER>
 
                 {inputInstances.map((component, index) => (
@@ -161,7 +192,7 @@ const NewAssessmentForm = (props) => {
                                     </NewAssessmentFormInputSVGContainer>
                                 }
                             </NewAssessmentFormInputContainerSUPER>
-                            <NewAssessmentFormSuggestionInput placeholder={inputPlaceholderText2}></NewAssessmentFormSuggestionInput>
+                            <NewAssessmentFormSuggestionInput placeholder={inputPlaceholderText2} value={suggestions[index]} onChange={(event) => handleSuggestionInputChange(event, index+1)}></NewAssessmentFormSuggestionInput>
                         </NewAssessmentFormInputContainerSUPERDUPER>
                     </React.Fragment>
                 ))}

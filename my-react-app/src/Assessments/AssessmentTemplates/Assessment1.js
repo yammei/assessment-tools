@@ -40,12 +40,10 @@ const Assessment1 = (props) => {
   };
 
   const scrollToPosition = () => {
-    const scrollToTop = 0;
-
-    window.scrollTo({
-      top: scrollToTop,
-      behavior: 'smooth',
-    });
+    const element = document.querySelector('.MainPage-Navigation-Bar');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -60,7 +58,7 @@ const Assessment1 = (props) => {
         <HappinessScale index={7} title="I've been able to focus."> </HappinessScale>
         <HappinessScale index={8} title="I've made good decisions."> </HappinessScale>
         <HappinessScale index={9} title="I've been able to fulfill my obligations (ex: work, school, etc.)"> </HappinessScale>
-        <button className='Assessment-Submit' onClick={() => handleSendScores(scores)}>Submit</button>
+        <button className='Assessment-Submit' onClick={() => handleSendScores(scores)} href=".MainPage-Navigation-Bar">Submit</button>
       </div>
   );
 };

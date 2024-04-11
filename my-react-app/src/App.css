@@ -454,14 +454,6 @@
   width: calc(200px + (0 * 20px));
   background-color: rgb(200,200,200);
 }
-#Scores-Container {
-  display: flex;
-  flex-direction: row;
-  margin: 0px 0px;
-}
-.Scores-Fraction-Text {
-  font-size: 11pt;
-}
 
 #Logout-Container {
   margin-right: 50px;

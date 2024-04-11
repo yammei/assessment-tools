@@ -163,6 +163,7 @@ app.post('/api/login', async (req, res) => {
     if (user && passwordMatch) {
       req.session.userId = user.id;
       req.session.username = user.username;
+      req.session.theme = 'light-mode';
       console.log(user);
       res.json({ message: 'Login successful', user });
     } else {
@@ -412,7 +413,7 @@ app.get('/getAssessmentData', (req, res) => {
   console.log(userId);
 
   const selectStmt = `
-    SELECT assessmentId, assessmentName, assessmentDescription, assessmentEntries, assessmentRatingNum 
+    SELECT assessmentId, assessmentName, assessmentDescription, assessmentEntries, assessmentRatingNum, assessmentSuggestions
     FROM user${userId}Assessments
   `;
 
@@ -425,7 +426,8 @@ app.get('/getAssessmentData', (req, res) => {
     if (rows && rows.length > 0) {
       res.json({ assessments: rows });
     } else {
-      res.status(404).json({ message: 'No assessments found for this user' });
+      // res.status(404).json({ message: 'No assessments found for this user' });
+      console.log('No assessments found for this user');
       return;
     }
   });
@@ -490,6 +492,7 @@ app.get('/getAssessmentDataAtIndex', (req, res) => {
   });
 });
 
+
 //GET ASSESSMENT NAMES: Retrieves existing assessment.
 app.get('/getAssessmentNames', (req, res) => {
   const { userId } = req.query;
@@ -508,11 +511,27 @@ app.get('/getAssessmentNames', (req, res) => {
     if (rows && rows.length > 0) {
       res.json({ assessments: rows });
     } else {
-      res.status(404).json({ message: 'No assessments found for this user' });
+      // res.status(404).json({ message: 'No assessments found for this user' });
+      'No assessments found for this user'
+      return;
     }
   });
 });
 
+// REMOVE: Custom assessment scores.
+app.delete('/deleteAssessment/:userId/:assessmentId', (req, res) => {
+  const { userId, assessmentId } = req.params;
+  const deleteStmt = `DELETE FROM user${userId}Assessments WHERE assessmentId = ${assessmentId}`;
+  console.log(deleteStmt);
+
+  db.run(deleteStmt, (err) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ message: 'Custom assessment scores removed successfully!' });
+    }
+  });
+});
 
 // Start the server
 app.listen(port, () => {
