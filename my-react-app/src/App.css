@@ -339,6 +339,7 @@
   margin-right: auto; */
 }
 .MainPage-Navigation-Logo {
+  scale: .2;
   /* margin-right: calc(50vw); */
 }
 .MainPage-Background {
@@ -363,8 +364,8 @@
   align-items: center;
   width: 680px;
   padding: 40px;
-  background-color: rgb(235,235,235);
-  border-radius: 10px;
+  background-color: rgb(235, 235, 235);
+  border-radius: 5px;
 }
 .MiscPage-Background-Dim {
   position: fixed;
@@ -459,6 +460,13 @@
   margin-right: 50px;
 }
 
+.Info-Text {
+  color: rgb(150, 150, 150);
+  font-size: 9pt;
+  font-style: italic;
+  margin-bottom: 0px;
+}
+
 @media (max-width: 800px) {
 
   .App-Background {
@@ -474,9 +482,9 @@
   .Logout-Container {
     scale: .8;
   }
-  .Scores-User {
+  /* .Scores-User {
     display: none;
-  }
+  } */
   .MainPage-Navigation-Logo {
     scale: .8;
     /* display: none; */

@@ -120,14 +120,18 @@ const NewAssessmentForm = (props) => {
 
     return(
         <NewAssessmentFormContainer>
+            <NewAssessmentFormContainer2>
             <div style={{height: 'fit-content', width: 'inherit', margin: 'auto', marginTop: '30px'}}>
 
-                <div style={{display: 'flex', flexDirection: 'row', height: '20px', marginBottom: '20px', backgroundColor: ''}}>
+                <div style={{display: 'flex', flexDirection: 'row', height: '20px', marginBottom: '10px', backgroundColor: ''}}>
                     <p style={{height: 'fit-content', width: 'fit-content', whiteSpace: 'nowrap', marginTop: '0px', marginRight: 'auto', paddingRight: '10px', marginBottom: '10px'}}>
                         General Information
                     </p>
                     <NewAssessmentFormVerticalDivider/>
                 </div>
+                <p className='Info-Text' style={{color: 'rgb(150, 150, 150)', fontSize: '9pt', marginLeft: '0px'}}>
+                    Enter new assessment information.
+                </p>
 
                 <NewAssessmentFormMiscInputsContainer style={{ display: 'flex', flexDirection: 'column' }}>
                     <label for='input-0'>Assessment Name</label>
@@ -143,13 +147,15 @@ const NewAssessmentForm = (props) => {
                     <input id='input-3' placeholder='Treatments & Suggestions' type='text' value={suggestions} onChange={(e) => setSuggestions(e.target.value)} /> */}
                 </NewAssessmentFormMiscInputsContainer>
 
-                <div style={{display: 'flex', flexDirection: 'row', height: '20px', margin: '30px 0px', backgroundColor: ''}}>
+                <div style={{display: 'flex', flexDirection: 'row', height: '20px', margin: '30px auto', marginBottom: '10px', backgroundColor: ''}}>
                     <p style={{height: 'fit-content', width: 'fit-content', whiteSpace: 'nowrap', marginTop: '0px', marginRight: 'auto', paddingRight: '10px', marginBottom: '10px'}}>
                         Assessment Entries
                     </p>
                     <NewAssessmentFormVerticalDivider/>
                 </div>
-
+                <p className='Info-Text' style={{color: 'rgb(150, 150, 150)', fontSize: '9pt', marginLeft: '0px'}}>
+                    Enter assessment prompt(s) and treatment(s).
+                </p>
 
                 <NewAssessmentFormColumnNames>
                     <p style={{width: '50px', textAlign: 'center'}}>no.</p>
@@ -202,6 +208,7 @@ const NewAssessmentForm = (props) => {
                 </NewAssessmentsSubmitButton>
 
             </div>
+            </NewAssessmentFormContainer2>
         </NewAssessmentFormContainer>
     );
 
@@ -211,11 +218,15 @@ const NewAssessmentFormContainer = styled.div`
     display: flex;
     flex-direction: column;
     height: fit-content;
-    width: inherit;
     margin-top: 10px;
     background-color: rgb(235, 235, 235);
-    border: 3px dashed rgb(200, 200, 200);
     border-radius: 5px;
+    box-shadow: 0px 1px 10px 0 rgba(0, 0, 0, 0.1);
+
+`;
+const NewAssessmentFormContainer2 = styled.div`
+    width: min-content;
+    margin: 0px auto;
     & p {
         font-size: 12pt;
         color: rgb(20, 20, 20);
@@ -344,6 +355,7 @@ const NewAssessmentFormMiscInputsContainer = styled.div`
 const NewAssessmentFormVerticalDivider = styled.div`
     flex: 1;
     height: 1px;
+    width: min-content;
     margin: 0px auto;
     margin-top: auto;
     background-color: rgb(200, 200, 200);

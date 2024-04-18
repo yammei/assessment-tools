@@ -56,12 +56,15 @@ const ExistingAssessments = (props) => {
     return(
         <ExistingAssessmentsContainer>
 
-            <div style={{display: 'flex', flexDirection: 'row', height: '20px', margin: '30px 0px', backgroundColor: ''}}>
+            <div style={{display: 'flex', flexDirection: 'row', height: '20px', margin: '30px 0px', marginBottom: '10px', backgroundColor: ''}}>
                 <p style={{fontSize: '12pt', height: 'fit-content', width: 'fit-content', whiteSpace: 'nowrap', marginTop: '0px', marginRight: 'auto', paddingRight: '10px', marginBottom: '10px'}}>
                     My Assessments
                 </p>
                 <NewAssessmentFormVerticalDivider/>
             </div>
+            <p className='Info-Text' style={{color: 'rgb(150, 150, 150)', marginLeft: '0px', marginBottom: '10px'}}>
+                Manage existing custom assessments.
+            </p>
 
             <ExistingAssessmentsInfo>
                     <ExistingAssessmentsInfoColumnNames>

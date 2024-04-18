@@ -70,6 +70,9 @@ const ExistingAssessmentsInfo = styled.div`
         height: fit-content;
         width: fit-content;
         margin: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        /* background-color: red; */
     }
 `;
 

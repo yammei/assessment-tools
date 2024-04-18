@@ -22,16 +22,17 @@ import NewAssessmentForm from './NewAssessmentForm';
 
     return(
         <ManageAssessmentsContainer>
-            <ManageAssessmentsButton onClick={handleNewAssessmentClick}>
-                <p>New Assessment</p>
-            </ManageAssessmentsButton>
+            <ManageAssessmentsContainer2>
+                <ManageAssessmentsButton onClick={handleNewAssessmentClick}>
+                    <p>New Assessment</p>
+                </ManageAssessmentsButton>
 
-            { displayNewAssessmentForm === true && <NewAssessmentForm updateAssessmentFormData={updateAssessmentFormData}/> }
+                { displayNewAssessmentForm === true && <NewAssessmentForm updateAssessmentFormData={updateAssessmentFormData}/> }
 
-            <ManageAssessmentsLists>
-                <ExistingAssessments transferAssessmentDataForUpdate={transferAssessmentDataForUpdate} displayNewAssessmentForm={handleNewAssessmentClick}/>
-            </ManageAssessmentsLists>
-
+                <ManageAssessmentsLists>
+                    <ExistingAssessments transferAssessmentDataForUpdate={transferAssessmentDataForUpdate} displayNewAssessmentForm={handleNewAssessmentClick}/>
+                </ManageAssessmentsLists>
+            </ManageAssessmentsContainer2>
         </ManageAssessmentsContainer>
     );
 
@@ -41,11 +42,23 @@ const ManageAssessmentsContainer = styled.div`
     display: flex;
     flex-direction: column;
     height: 80vh;
+    width: 610px;
+    /* scale: 1.05; */
     overflow: auto;
+    /* background-color: red; */
     &::-webkit-scrollbar {
         display: none;
         background-color: rgb(235, 235, 235);
     }
+    /* & div {
+        scale: .97;
+    } */
+`;
+const ManageAssessmentsContainer2 = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    margin: 0px auto;
 `;
 
 const ManageAssessmentsButton = styled.div`
@@ -70,8 +83,10 @@ const ManageAssessmentsLists = styled.div`
     height: fit-content;
     width: inherit;
     margin: 10px 0px;
-    border: 3px dashed rgb(200, 200, 200);
+    background-color: rgb(235, 235, 235);
     /* background-color: red; */
+    border-radius: 5px;
+    box-shadow: 0px 1px 10px 0 rgba(0, 0, 0, 0.1);
     & p {
         height: fit-content;
         width: fit-content;

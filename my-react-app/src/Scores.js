@@ -45,28 +45,36 @@ const Scores = ({ userId, isLoggedIn }) => {
     }
 
     const fetchCustomAssessmentScores = async () => {
+      console.log("fetchCustomAssessmentScores() reached.");
       try {
+        // Retrieve assessment name, ID, and rating
         const apiUrl = `http://localhost:4000/getAssessmentNames?userId=${storedUserId}`;
         const response = await axios.get(apiUrl);
         const customAssessmentIds = response.data.assessments.map(assessment => parseInt(assessment.assessmentId));
-        setCustomScores(customAssessmentIds);
-        const customAssessmentNames = response.data.assessments.map(assessment => parseInt(assessment.assessmentNames));
+        const customAssessmentNames = response.data.assessments.map(assessment => assessment.assessmentName);
+        const customAssessmentRatingModded = response.data.assessments.map(assessment => parseInt(assessment.assessmentRatingNum)*10);
+        console.log("Response 1:", response);
+        console.log("Response 1 (Processed):", customAssessmentRatingModded);
         setAssessmentNames(customAssessmentNames);
+        setAssessmentTotalScore(customAssessmentRatingModded);
 
-        const apiUrl2 = `http://localhost:4000/getAssessment2?userId=${storedUserId}`;
+
+        // Retrieve assessment scores
+        const apiUrl2 = `http://localhost:4000/getScoreCustom/${storedUserId}/${customAssessmentIds}`;
         const response2 = await axios.get(apiUrl2);
-        const customAssessmentRating = response2.data.assessments.map(assessment => parseInt(assessment.assessmentRating * assessment.assessmentEntries.length));
-        console.log(customAssessmentRating);
-        setAssessmentTotalScore("haweraewr", customAssessmentRating);
+        const customAssessmentScores = response2.data.map(item => item.score);
+        console.log("Response 2:", response2);
+        console.log("Response 2 (Processed):", customAssessmentScores);
+        setCustomScores(customAssessmentScores);
 
-        const newCustomScores = [];
-        for (let i = 0; i < customAssessmentIds.length; i++) {
-          console.log(customAssessmentIds[i]);
-          const response = await axios.get(`http://localhost:4000/getScoreCustom/${storedUserId}/${customAssessmentIds[i]}`);
-          newCustomScores.push(response.data.score);
-        }
-        setCustomScores(newCustomScores);
-        console.log("hey", newCustomScores);
+        // const newCustomScores = [];
+        // for (let i = 0; i < customAssessmentIds.length; i++) {
+        //   console.log(customAssessmentIds[i]);
+        //   const response = await axios.get(`http://localhost:4000/getScoreCustom/${storedUserId}/${customAssessmentIds[i]}`);
+        //   newCustomScores.push(response.data.score);
+        // }
+        // setCustomScores(newCustomScores);
+        // console.log("hey", newCustomScores);
       } catch (error) {
         console.error('Error fetching custom assessment scores:', error);
       }
@@ -85,8 +93,12 @@ const Scores = ({ userId, isLoggedIn }) => {
         <ScoresContentPart1>
 
           <TextContainer>
-            <p className='Scores-User'>Your Scores</p>
-            <ScoreContentVerticalDivider/>
+            <SectionTitleContainer>
+              <p className='Scores-User'>Your Scores</p>
+              <ScoreContentVerticalDivider/>
+            </SectionTitleContainer>
+            <p className='Info-Text'>Your current and available assessment scores.</p>
+
 
             {scores.map((score, index) => (
               <p key={index}>Happiness: {score}<span className='Scores-Fraction-Text'  style={{fontSize: '11pt'}}> of 50</span></p>
@@ -96,7 +108,10 @@ const Scores = ({ userId, isLoggedIn }) => {
               <p key={index}>Social Self Care: {score}<span className='Scores-Fraction-Text' style={{fontSize: '11pt'}}> of 30</span></p>
             ))}
 
-            {/* <p>{assessmentNames[0]}: <b>{customScores[0]}</b><span className='Scores-Fraction-Text'  style={{fontSize: '11pt'}}> of {assessmentTotalScore[0]}</span></p> */}
+            <p>{assessmentNames[0]}: {customScores[0]}<span className='Scores-Fraction-Text'  style={{fontSize: '11pt'}}> of {assessmentTotalScore[0]}</span></p>
+            <p>{assessmentNames[1]}: {customScores[1]}<span className='Scores-Fraction-Text'  style={{fontSize: '11pt'}}> of {assessmentTotalScore[1]}</span></p>
+
+            {/* <p>hi lol these are the total score possible: {assessmentTotalScore[1]}</p> */}
           </TextContainer>
 
         </ScoresContentPart1>
@@ -104,8 +119,12 @@ const Scores = ({ userId, isLoggedIn }) => {
 
         <ScoresContentPart2>
           <TextContainer>
-            <p>Assessment Score History</p>
-            <ScoreContentVerticalDivider/>
+            <SectionTitleContainer>
+              <p className='Scores-User'>Assessment History</p>
+              <ScoreContentVerticalDivider/>
+            </SectionTitleContainer>
+            <p className='Info-Text'>A historical graph of your past assessment scores.</p>
+
           </TextContainer>
           <HistoryContainer><History/></HistoryContainer>
         </ScoresContentPart2>
@@ -138,18 +157,19 @@ const ScoresContentPart1 = styled.div`
   height: fit-content;
   width: 600px;
   margin: 20px auto;
-  /* background-color: red; */
-  border: 3px dashed rgb(200, 200, 200);
+  background-color: rgb(235, 235, 235);
+  border-radius: 5px;
+  box-shadow: 0px 1px 10px 0 rgba(0, 0, 0, 0.1);
   p {
     margin: 5px;
   }
 `;
 
 const TextContainer = styled.div`
-    height: fit-content;
-    width: 500px;
-    margin: auto;
-    padding: 20px 0px;
+  height: fit-content;
+  width: 500px;
+  margin: auto;
+  padding: 20px 0px;
 `;
 
 const ScoresContentPart2 = styled.div`
@@ -158,22 +178,40 @@ const ScoresContentPart2 = styled.div`
   height: fit-content;
   width: 600px;
   margin: 20px auto;
-  /* background-color: red; */
-  border: 3px dashed rgb(200, 200, 200);
+  background-color: rgb(235, 235, 235);
+  border-radius: 5px;
+  box-shadow: 0px 1px 10px 0 rgba(0, 0, 0, 0.1);
+
 `;
 
 const HistoryContainer = styled.div`
-    height: fit-content;
-    width: fit-content;
-    scale: .8;
-    margin: auto;
+  height: fit-content;
+  width: fit-content;
+  scale: .8;
+  margin: auto;
 `;
 
 const ScoreContentVerticalDivider = styled.div`
-    /* flex: 1; */
-    height: 1px;
-    width: 500px;
-    margin: 0px auto;
-    background-color: rgb(200, 200, 200);
-    /* background-color: red; */
+  /* flex: 1; */
+  height: 1px;
+  width: 500px;
+  margin: 0px auto;
+  margin-top: auto;
+  background-color: rgb(200, 200, 200);
+  /* background-color: red; */
+`;
+
+const SectionTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  width: 100%;
+  margin: 0px auto;
+  margin-bottom: 10px;
+  /* background-color: rgb(255, 226, 226); */
+  & p {
+    white-space: nowrap;
+    margin: auto 0px;
+    padding-right: 10px;
+  }
 `;

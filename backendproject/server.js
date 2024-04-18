@@ -106,21 +106,29 @@ app.get('/api/getscore2/:userId', (req, res) => {
   });
 });
 
-app.get('/getScoreCustom/:userId/:customAssessmentId', (req, res) => {
+app.get('/getScoreCustom/:userId/:customAssessmentIds', (req, res) => {
   const userId = req.params.userId;
-  const customAssessmentId = req.params.customAssessmentId;
+  const customAssessmentIds = req.params.customAssessmentIds.split(',');
 
-  console.log(`SELECT score FROM user${userId}CustomScores WHERE assessmentId=${customAssessmentId}`);
+  selectStmt = (`
+  SELECT * 
+  FROM user${userId}CustomScores 
+  WHERE assessmentId 
+  IN (${customAssessmentIds.join(',')}) 
+  GROUP BY assessmentId 
+  LIMIT 4
+  `);
 
-  db.get(`SELECT score FROM user${userId}CustomScores WHERE assessmentId=${customAssessmentId}`, (err, row) => {
+  db.all(selectStmt, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
-    if (row) {
-      res.json({ score: row.score });
+    if (rows && rows.length > 0) {
+      console.log("Response Data:", rows);
+      res.json(rows);
     } else {
-      res.json({ score: 0 });
+      // res.json({ scores: [] });
     }
   });
 });
@@ -262,7 +270,7 @@ app.post('/api/scoresCustom/:userId', (req, res) => {
 
   const scoreSum = scoreDistribution.reduce((acc, num) => acc + num, 0);
 
-  const initStmt = `CREATE TABLE IF NOT EXISTS user${userId}CustomScores(assessmentId INTEGER, assessment TEXT, score INTEGER, scoreDist TEXT, date DATE, time TIME);`;
+  const initStmt = `CREATE TABLE IF NOT EXISTS user${userId}CustomScores (assessmentId INTEGER, assessment TEXT, score INTEGER, scoreDist TEXT, date DATE, time TIME);`;
 
   db.run(initStmt, (err) => {
     if (err) {
@@ -273,7 +281,6 @@ app.post('/api/scoresCustom/:userId', (req, res) => {
     const assessmentScoreDistribution = JSON.stringify(scoreDistribution);
     const insertStmt = db.prepare(`INSERT INTO user${userId}CustomScores (assessmentId, assessment, score, scoreDist, date, time) VALUES (?, ?, ?, ?, DATE('now'), TIME('now'))`);
     console.log(`assessmentId: ${assessmentId}, assessmentName: ${assessmentName}, scoreSum: ${scoreSum}, scoreDistribution: ${scoreDistribution}, `);
-
     insertStmt.run(assessmentId, assessmentName, scoreSum, assessmentScoreDistribution, (err) => {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -496,10 +503,10 @@ app.get('/getAssessmentDataAtIndex', (req, res) => {
 //GET ASSESSMENT NAMES: Retrieves existing assessment.
 app.get('/getAssessmentNames', (req, res) => {
   const { userId } = req.query;
-  console.log(userId);
+  console.log("getAssessmentNames() reached.", userId);
 
   const selectStmt = `
-    SELECT assessmentId, assessmentName
+    SELECT *
     FROM user${userId}Assessments
   `;
 
@@ -509,10 +516,13 @@ app.get('/getAssessmentNames', (req, res) => {
     }
 
     if (rows && rows.length > 0) {
+      console.log("fish", rows);
       res.json({ assessments: rows });
+      console.log("fish2", rows);
+      return ("fish3");
     } else {
       // res.status(404).json({ message: 'No assessments found for this user' });
-      'No assessments found for this user'
+      console.log("fish");
       return;
     }
   });
