@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 
-let scores=[0,0,0,0,0,0,0,0,0,0];
+let scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const CustomScale = (props) => {
   const [selectedRating, setSelectedRating] = useState(null);
 
   const handleRatingClick = (rating) => {
     setSelectedRating(rating === selectedRating ? null : rating);
-    scores[props.index]=rating;
+    scores[props.index] = rating;
     scrollToPosition();
-    // console.log(scores);
   };
 
   const scrollToPosition = () => {
@@ -21,12 +20,14 @@ const CustomScale = (props) => {
     });
   };
 
+  const ratingScale = Array.from({ length: props.ratingNum }, (_, index) => index + 1);
+
   return (
     <div className='Question-Container'>
       <p className='Question-Text'>{props.title}</p>
       <div className='Rating-Container'>
         <p className='Question-Rating-Key'>Disagree</p>
-        {[1, 2, 3, 4, 5].map((rating) => (
+        {ratingScale.map((rating) => (
           <button
             className='Question-Rating-Button'
             key={rating}
@@ -47,4 +48,5 @@ const CustomScale = (props) => {
     </div>
   );
 };
+
 export { CustomScale, scores };

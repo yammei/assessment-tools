@@ -16,6 +16,9 @@ const LineGraph = (props) => {
     const [componentAssessment2Data, setComponentAssessment2Data] = useState([{y: 0},]);
     const [datesAssessment2Data, setDatesAssessment2Data] = useState([{dd: '', mm: ''},]);
 
+    const [componentAssessmentCustomData, setComponentAssessmentCustomData] = useState([{y: 0},]);
+    const [datesAssessmentCustomData, setDatesAssessmentCustomData] = useState([{dd: '', mm: ''},]);
+
     const componentSize = [(containerWidth*.85), 250]; // (x, y) or (width, height)
     const componentSections = 4; // Number of entries.
     const scoreRange = [0, 50]; // (Minimum Score, Maximum Score)
@@ -29,6 +32,8 @@ const LineGraph = (props) => {
                 const storedUserId = localStorage.getItem('userId');
                 const response = await axios.get(`http://localhost:4000/api/getArchiveScore/${storedUserId}/${numOfEntries}/${assessmentName}`);
                 const reversedData = response.data.entries.reverse();
+
+                console.log(response)
 
                 const newScoreData = reversedData.map(entry => ({ y: entry.score }));
                 const newDatesData = reversedData.map(entry => {
@@ -44,14 +49,18 @@ const LineGraph = (props) => {
                     setComponentAssessment2Data(newScoreData);
                     setDatesAssessment2Data(newDatesData);
                 }
-
-
+                if (assessmentName === 'relationship-test') {
+                    setComponentAssessmentCustomData(newScoreData);
+                    setDatesAssessmentCustomData(newDatesData);
+                }
             } catch (error) {
                 console.error("Error fetching or processing data:", error);
             }
         };
         getAssessmentData(4, 'happiness');
         getAssessmentData(4, 'socialselfcare');
+        // getAssessmentData(4, 'health-test');
+        getAssessmentData(4, 'relationship-test');
 
     }, []);
 
@@ -73,7 +82,7 @@ const LineGraph = (props) => {
     return (
             <div className="LineGraph-Background" style={lineGraphBackgroundStyle}>
                 {/* SUB-COMPONENT Part 1A/B */}
-                <LineGraphScoreAndComponent scoreRange={scoreRange} componentData1={componentAssessment1Data} componentData2={componentAssessment2Data} componentSize={componentSize} componentSections={componentSections} datesWidth={datesWidth}/>
+                <LineGraphScoreAndComponent scoreRange={scoreRange} componentData1={componentAssessment1Data} componentData2={componentAssessment2Data} componentDataCustom={componentAssessmentCustomData} componentSize={componentSize} componentSections={componentSections} datesWidth={datesWidth}/>
                 {/* SUB-COMPONENT Part 2 */}
                 <LineGraphDates datesData1={datesAssessment1Data} datesData2={datesAssessment2Data} datesWidth={datesWidth}/>
             </div>
@@ -102,13 +111,14 @@ const LineGraphScoreAndComponent = (props) => {
     const size = props.componentSize;
     const data1 = props.componentData1;
     const data2 = props.componentData2;
+    const dataCustom = props.componentDataCustom
     const sections = props.componentSections;
     const width = props.datesWidth;
 
     return(
         <div className="LineGraph-Content-Row-1" style={{height: `${size[1]}px`, display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 'auto'}}>
             <LineGraphScore scoreRange={range}/>
-            <LineGraphComponent data1={data1} data2={data2} size={size} sections={sections} scoreRange={range} width={width}/>
+            <LineGraphComponent data1={data1} data2={data2} dataCustom={dataCustom} size={size} sections={sections} scoreRange={range} width={width}/>
         </div>
     );
 };
@@ -125,6 +135,7 @@ const LineGraphComponent = (props) => {
     const maxScore = Math.max(...props.scoreRange);
     const incomingData1 = props.data1;
     const incomingData2 = props.data2;
+    const incomingDataCustom = props.dataCustom;
 
     // STYLE: Line Graph Component Stylings
     const lineGraphDisplayStyle = {
@@ -156,6 +167,10 @@ const LineGraphComponent = (props) => {
             x: index * intervals,
             y: height - (height * entry.y / maxScore),
         }));
+        var outgoingDataCustom = incomingDataCustom.map((entry, index) => ({
+            x: index * intervals,
+            y: height - (height * entry.y / maxScore),
+        }));
 
         // CREATE: Assessment 1 score trend.
         ctx.clearRect(0, 0, width, height);
@@ -179,6 +194,18 @@ const LineGraphComponent = (props) => {
         }
 
         ctx.strokeStyle = 'rgb(52, 26, 170)';
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        // CREATE: Assessment 2 score trend.
+        ctx.beginPath();
+        ctx.moveTo(outgoingDataCustom[0].x, outgoingDataCustom[0].y);
+
+        for (let i = 1; i < outgoingDataCustom.length; i++) {
+            ctx.lineTo(outgoingDataCustom[i].x, outgoingDataCustom[i].y);
+        }
+
+        ctx.strokeStyle = 'rgb(221, 132, 16)';
         ctx.lineWidth = 5;
         ctx.stroke();
     }, [width, height, intervals, incomingData1]);

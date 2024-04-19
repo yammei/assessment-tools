@@ -52,19 +52,14 @@ const Scores = ({ userId, isLoggedIn }) => {
         const response = await axios.get(apiUrl);
         const customAssessmentIds = response.data.assessments.map(assessment => parseInt(assessment.assessmentId));
         const customAssessmentNames = response.data.assessments.map(assessment => assessment.assessmentName);
-        const customAssessmentRatingModded = response.data.assessments.map(assessment => parseInt(assessment.assessmentRatingNum)*10);
-        console.log("Response 1:", response);
-        console.log("Response 1 (Processed):", customAssessmentRatingModded);
+        const customAssessmentRatingModded = response.data.assessments.map(assessment => parseInt(assessment.assessmentRatingNum)*(JSON.parse(response.data.assessments[0].assessmentEntries).length));
         setAssessmentNames(customAssessmentNames);
         setAssessmentTotalScore(customAssessmentRatingModded);
-
 
         // Retrieve assessment scores
         const apiUrl2 = `http://localhost:4000/getScoreCustom/${storedUserId}/${customAssessmentIds}`;
         const response2 = await axios.get(apiUrl2);
         const customAssessmentScores = response2.data.map(item => item.score);
-        console.log("Response 2:", response2);
-        console.log("Response 2 (Processed):", customAssessmentScores);
         setCustomScores(customAssessmentScores);
 
         // const newCustomScores = [];

@@ -30,11 +30,13 @@ const AssessmentSelectionContainer = styled.div`
     background-color: rgb(175,175,175);
     border-radius: 10px;
     &:hover {
-        filter: brightness(.9);
+        /* filter: brightness(.9); */
+        background-color: rgb(105, 173, 236);
     }
     & p {
         font-size: 12pt;
-        color: rgb(235,235,235);
+        /* color: rgb(235,235,235); */
+        color: rgb(20, 20, 20);
         margin: auto;
     }
 `;

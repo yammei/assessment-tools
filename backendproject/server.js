@@ -269,8 +269,10 @@ app.post('/api/scoresCustom/:userId', (req, res) => {
   }
 
   const scoreSum = scoreDistribution.reduce((acc, num) => acc + num, 0);
+  const scoreDistString = JSON.stringify(scoreDistribution);
 
   const initStmt = `CREATE TABLE IF NOT EXISTS user${userId}CustomScores (assessmentId INTEGER, assessment TEXT, score INTEGER, scoreDist TEXT, date DATE, time TIME);`;
+  const archiveStmt = db.prepare(`INSERT INTO user${userId}History (assessment, score, scoreDist, date, time) VALUES (?, ?, ?, DATE('now'), TIME('now'))`);  
 
   db.run(initStmt, (err) => {
     if (err) {
@@ -285,9 +287,15 @@ app.post('/api/scoresCustom/:userId', (req, res) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
+      } else {
+        archiveStmt.run(assessmentName, scoreSum, scoreDistString, (err) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+          } else {
+            res.status(200).json({ message: 'Custom assessment scores submitted successfully!' });
+          }
+        });
       }
-
-      res.status(200).json({ message: 'Custom assessment scores submitted successfully!' });
     });
   });
 });
@@ -320,6 +328,8 @@ app.get('/api/getArchiveScore/:userId/:numOfEntries/:assessmentName', (req, res)
   const userId = req.params.userId;
   const numOfEntries = req.params.numOfEntries;
   const assessmentName = req.params.assessmentName;
+
+  console.log("Retrieving ");
 
   db.all(`SELECT * FROM user${userId}History WHERE assessment = '${assessmentName}' ORDER BY date DESC, time DESC LIMIT ${numOfEntries}`, (err, rows) => {
     if (err) {

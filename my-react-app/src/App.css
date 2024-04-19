@@ -243,10 +243,11 @@
   border-radius: 100px;
   border: none;
   /* border: 2px solid rgb(255, 149, 0); */
-  background-color: rgb(255, 149, 0);
+  background-color: rgb(110, 185, 255);
+  border-bottom: 4px solid rgb(75, 75, 75);
 }
 .Assessment-Submit:hover {
-  background-color: rgb(224, 131, 0);
+  background-color: rgb(105, 173, 236);
 }
 
 .Question-Container {
